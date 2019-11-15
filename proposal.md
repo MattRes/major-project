@@ -15,8 +15,8 @@ I'm going to make an RPG game, where one can explore diffrent rooms/levels. They
 - Items (armor, weapons, consumables) 
 
 ## Nice to have list 
-- Appealing graphics
-- Diffrent Classes (2-4)
+- Appealing graphics (levels, enemies, chests, etc.)
+- Diffrent Classes (2-4 (Archer, Warrior, Mage, ?? ))
 - Mana points (depending if classes get added)
 - Class specific abilities (depending if classes get added)
 - Boss fight
