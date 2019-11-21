@@ -6,8 +6,19 @@
 // - describe what you did to take this project "above and beyond"
 
 // Tile set taken from https://opengameart.org/content/dungeon-crawl-32x32-tiles
+// Font style taken from https://www.fontspace.com/chequered-ink/ancient-modern-tales
+
 let state; 
 
+let player = {
+  health = 60, 
+  attack = 1, 
+  defense = 0
+}
+
+function preload(){
+  font = loadFont("assets/Ancient Modern Tales.otf")
+}
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -24,21 +35,21 @@ function updateState(){
   if (state === "menu"){
     displayMenu(); 
   }
-  if (state === "option"){
+  else if (state === "option"){
     displayOptions();
-    optionsButtons();
   }
-  if (state === "gameChoice")
+  else if (state === "gameChoice"){
     displayGameChoice();
   }
-  if (state === "gameLoop"){
+  else if (state === "gameLoop"){
     displayGameLoop();
-    gameLoopButtons();
   }
+}
 function displayMenu(){
   background ("#524646");
 // Game text 
   textSize(55);
+  textFont(font);
   text ("RPG Game", width/2, height/3 )
   menuButtons();
 }
@@ -49,6 +60,7 @@ function menuButtons(){
   startButton.resize(200, 70);
   startButton.color = "#b00e0e";
   startButton.textSize = 20;
+  startButton.textFont = font;
   startButton.text = "New Game"
   startButton.draw();
   startButton.onHover = function(){
@@ -65,6 +77,7 @@ function menuButtons(){
   optionButton.resize(200, 70);
   optionButton.color = "#b00e0e";
   optionButton.textSize = 20;
+  optionButton.textFont = font;
   optionButton.text = "Options"
   optionButton.draw();
   optionButton.onPress = function(){
@@ -76,7 +89,7 @@ function menuButtons(){
 
 
 function displayOptions(){
-  background (0,0,0);
+  background ("#524646");
   optionsButtons();
 }
 
@@ -85,6 +98,7 @@ function optionsButtons(){
   optionBackButton.resize(200, 70);
   optionBackButton.color = "#b00e0e";
   optionBackButton.textSize = 20;
+  optionBackButton.textFont = font;
   optionBackButton.text = "Back"
   optionBackButton.draw();
   optionBackButton.onPress = function(){
@@ -99,19 +113,29 @@ function displayGameChoice(){
   confirmButton.resize(200, 70);
   confirmButton.color = "#b00e0e";
   confirmButton.textSize = 20;
-  confirmButton.text = "Back"
-  confirmButton .draw();
+  confirmButton.textFont = font;
+  confirmButton.text = "Confirm"
+  confirmButton.draw();
   confirmButton.onPress = function(){
     clear();
+    console.log("press")
     state = "gameLoop";
   }
 }
 
-function displayLoop(){
-
+function displayGameLoop(){
+  r = random(0,255)
+  g = random(0,255)
+  b = random(0,255)
+  background(r,g,b);
+  gameLoopButtons();
 }
 
 function gameLoopButtons(){
 
+}
+
+function healthBar(){
+  
 }
 // keep player outside of text based grid
