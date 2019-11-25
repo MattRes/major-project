@@ -11,10 +11,10 @@
 let state; 
 
 let player = {
-  health = 60, 
-  attack = 1, 
-  defense = 0
-}
+  health:  60, 
+  attack: 1, 
+  defense: 0
+};
 
 function preload(){
   font = loadFont("assets/Ancient Modern Tales.otf")
@@ -64,7 +64,8 @@ function menuButtons(){
   startButton.text = "New Game"
   startButton.draw();
   startButton.onHover = function(){
-    startButton.color = "#d11313";
+    startButton.color = "#800606"
+    startButton.draw();
   }
   startButton.onPress = function(){
     clear();
@@ -80,6 +81,10 @@ function menuButtons(){
   optionButton.textFont = font;
   optionButton.text = "Options"
   optionButton.draw();
+  optionButton.onHover = function(){
+    optionButton.color = "#800606"
+    optionButton.draw();
+  }
   optionButton.onPress = function(){
     console.log("press")
     clear();
@@ -101,6 +106,10 @@ function optionsButtons(){
   optionBackButton.textFont = font;
   optionBackButton.text = "Back"
   optionBackButton.draw();
+  optionBackButton.onHover = function(){
+    optionBackButton.color = "#800606"
+    optionBackButton.draw();
+  }
   optionBackButton.onPress = function(){
     clear();
     state = "menu";
@@ -109,13 +118,27 @@ function optionsButtons(){
 
 function displayGameChoice(){
   background(43,75,210);
-  confirmButton = new Clickable(width/2 - 100 , height/2 + 125)
+  displayGameChoiceButtons();
+
+}
+
+function displayGameChoiceButtons(){
+  // fill(0);
+  // rect(width/4, height/3, 300, 500);
+  // rect(width- width/4, height/3, 300, 500);
+  
+  //Button to confirm Choice
+  confirmButton = new Clickable(width/2 - 100, height - height/4)
   confirmButton.resize(200, 70);
   confirmButton.color = "#b00e0e";
   confirmButton.textSize = 20;
   confirmButton.textFont = font;
   confirmButton.text = "Confirm"
   confirmButton.draw();
+  confirmButton.onHover = function(){
+    confirmButton.color = "#800606"
+    confirmButton.draw();
+  }
   confirmButton.onPress = function(){
     clear();
     console.log("press")
