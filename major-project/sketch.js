@@ -7,6 +7,15 @@
 
 // Tile set taken from https://opengameart.org/content/dungeon-crawl-32x32-tiles
 // Font style taken from https://www.fontspace.com/chequered-ink/ancient-modern-tales
+ let tiles;
+ let tilesHigh, tilesWide;
+ let tilesWidth, tilesHeight;
+ let levelToLoad;
+ let lines;
+
+
+
+
 
 let state; 
 
@@ -19,17 +28,37 @@ let player = {
   level: 0,
   xp: 0
 };
-let playerLast;
+let playerLastXp;
 
 function preload(){
   font = loadFont("assets/Ancient Modern Tales.otf")
+  levelToLoad = "assets/levels/1.txt";
+  lines = loadStrings(levelToLoad);
+  //player = 
+  //enemie 1 = 
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   state = "menu"
   textAlign(CENTER, CENTER);
-  playerLast = 0;
+  playerLastXp = 0;
+
+  tilesHigh = lines.length;
+  tilesWide = lines[0].length;
+
+  tileWidth = width / tilesWide;
+  tileHeight = height / tilesHigh;
+
+  tiles = createEmpty2dArray(tilesWide, tilesHigh);
+
+  //put values into 2d array of characters
+  for (let y = 0; y < tilesHigh; y++) {
+    for (let x = 0; x < tilesWide; x++) {
+      let tileType = lines[y][x];
+      tiles[x][y] = tileType;
+    }
+  }
 }
 
 function draw() {
@@ -48,7 +77,7 @@ function updateState(){
     displayGameChoice();
   }
   else if (state === "gameLoop"){
-    displayGameLoop();
+    gameLoop();
   }
 }
 function displayMenu(){
@@ -152,12 +181,14 @@ function displayGameChoiceButtons(){
   }
 }
 
-function displayGameLoop(){
+function gameLoop(){
   r = random(0,255)
   g = random(0,255)
   b = random(0,255)
-  background(255);
-  updateHealthBar()
+  displayLevel();
+  createEmpty2dArray();
+
+  updateHealthBar();
   gameLoopButtons();
   playerLevelUp();
 }
@@ -167,17 +198,51 @@ function gameLoopButtons(){
 }
 
 function playerLevelUp(){
+  //Levels the player up incresing Health
   for (let i = 0; i < player.maxLevel; i++)
-    if (player.xp >= playerLast + 500){
+    if (player.xp >= playerLastXp + 500){
       player.health = player.health * 1.3
       player.maxHealth = player.maxHealth * 1.3
       player.level ++;
-      playerLast = player.xp + playerLast;
+      playerLastXp = player.xp + playerLastXp;
       updateHealthBar();
   }
 }
 
+function displayLevel() {
+  for (let y = 0; y < tilesHigh; y++) {
+    for (let x = 0; x < tilesWide; x++) {
+      showTiles(tiles[x][y], x, y);
+    }
+  }
+}
+
+
+function showTiles(location, x, y){
+  if (location === "#"){
+    fill(0);
+    rect(x*tileWidth, y*tileHeight, tilesWidth, tileHeight);
+  }
+  else if (location === "."){
+    fill(255);
+    rect(x*tileWidth, y*tileHeight, tilesWidth, tileHeight);
+  }
+}
+function createEmpty2dArray(cols, rows) {
+  //Creates a empty 2d array
+  let randomGrid = [];
+  for (let x = 0; x < cols; x++) {
+    randomGrid.push([]);
+    for (let y = 0; y < rows; y++) {
+      randomGrid[x].push(0);
+    }
+  }
+  return randomGrid;
+}
+
+
 function updateHealthBar(){
+  // Creates a functioning Health bar with scalablity to level
   x = map(player.health, 0, player.maxHealth, 0, 90);
   rectMode(CENTER);
   fill(0);
