@@ -11,10 +11,15 @@
 let state; 
 
 let player = {
+  maxHealth:60,
+  maxLevel: 15,
   health:  60, 
   attack: 1, 
-  defense: 0
+  defense: 0,
+  level: 0,
+  xp: 0
 };
+let playerLast;
 
 function preload(){
   font = loadFont("assets/Ancient Modern Tales.otf")
@@ -24,6 +29,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   state = "menu"
   textAlign(CENTER, CENTER);
+  playerLast = 0;
 }
 
 function draw() {
@@ -150,15 +156,36 @@ function displayGameLoop(){
   r = random(0,255)
   g = random(0,255)
   b = random(0,255)
-  background(r,g,b);
+  background(255);
+  updateHealthBar()
   gameLoopButtons();
+  playerLevelUp();
 }
 
 function gameLoopButtons(){
 
 }
 
-function healthBar(){
-  
+function playerLevelUp(){
+  for (let i = 0; i < player.maxLevel; i++)
+    if (player.xp >= playerLast + 500){
+      player.health = player.health * 1.3
+      player.maxHealth = player.maxHealth * 1.3
+      player.level ++;
+      playerLast = player.xp + playerLast;
+      updateHealthBar();
+  }
+}
+
+function updateHealthBar(){
+  x = map(player.health, 0, player.maxHealth, 0, 90);
+  rectMode(CENTER);
+  fill(0);
+  rect(width/15, height/16, 100, 20);
+  fill(0,255,0);
+  rect(width/15, height/16, x, 10)
+  textSize(10);
+  fill(255,0,0);
+  text("Health : " + floor(player.health), width/15, height/16)
 }
 // keep player outside of text based grid
