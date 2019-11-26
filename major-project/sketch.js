@@ -26,9 +26,9 @@ let player = {
   attack: 1, 
   defense: 0,
   level: 0,
+  lastXp: 0,
   xp: 0
 };
-let playerLastXp;
 
 function preload(){
   font = loadFont("assets/Ancient Modern Tales.otf")
@@ -39,10 +39,9 @@ function preload(){
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(1000,750);
   state = "menu"
   textAlign(CENTER, CENTER);
-  playerLastXp = 0;
 
   tilesHigh = lines.length;
   tilesWide = lines[0].length;
@@ -182,11 +181,9 @@ function displayGameChoiceButtons(){
 }
 
 function gameLoop(){
-  r = random(0,255)
-  g = random(0,255)
-  b = random(0,255)
+  background(255);
+
   displayLevel();
-  createEmpty2dArray();
 
   updateHealthBar();
   gameLoopButtons();
@@ -200,11 +197,11 @@ function gameLoopButtons(){
 function playerLevelUp(){
   //Levels the player up incresing Health
   for (let i = 0; i < player.maxLevel; i++)
-    if (player.xp >= playerLastXp + 500){
-      player.health = player.health * 1.3
-      player.maxHealth = player.maxHealth * 1.3
+    if (player.xp >= player.lastXp + 500){
+      player.health = player.health * 1.3;
+      player.maxHealth = player.maxHealth * 1.3;
       player.level ++;
-      playerLastXp = player.xp + playerLastXp;
+      player.lastXp = player.xp + player.lastXp;
       updateHealthBar();
   }
 }
@@ -212,13 +209,13 @@ function playerLevelUp(){
 function displayLevel() {
   for (let y = 0; y < tilesHigh; y++) {
     for (let x = 0; x < tilesWide; x++) {
-      showTiles(tiles[x][y], x, y);
+      showTile(tiles[x][y], x, y);
     }
   }
 }
 
 
-function showTiles(location, x, y){
+function showTile(location, x, y){
   if (location === "#"){
     fill(0);
     rect(x*tileWidth, y*tileHeight, tilesWidth, tileHeight);
@@ -228,6 +225,7 @@ function showTiles(location, x, y){
     rect(x*tileWidth, y*tileHeight, tilesWidth, tileHeight);
   }
 }
+
 function createEmpty2dArray(cols, rows) {
   //Creates a empty 2d array
   let randomGrid = [];
@@ -240,7 +238,6 @@ function createEmpty2dArray(cols, rows) {
   return randomGrid;
 }
 
-
 function updateHealthBar(){
   // Creates a functioning Health bar with scalablity to level
   x = map(player.health, 0, player.maxHealth, 0, 90);
@@ -248,9 +245,9 @@ function updateHealthBar(){
   fill(0);
   rect(width/15, height/16, 100, 20);
   fill(0,255,0);
-  rect(width/15, height/16, x, 10)
-  textSize(10);
+  rect(width/15, height/16, x, 10);
+  textSize(15);
   fill(255,0,0);
-  text("Health : " + floor(player.health), width/15, height/16)
+  text("Health : " + floor(player.health), width/15, height/16);
 }
 // keep player outside of text based grid
