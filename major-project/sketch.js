@@ -20,6 +20,7 @@
 let state; 
 
 let player = {
+  sprite: 0, 
   maxHealth:60,
   maxLevel: 15,
   health:  60, 
@@ -34,6 +35,8 @@ function preload(){
   font = loadFont("assets/Ancient Modern Tales.otf")
   levelToLoad = "assets/levels/1.txt";
   lines = loadStrings(levelToLoad);
+  sample = loadImage ("sprites/brickWall.png");
+  player.sprite = loadImage("sprites/angel.png");
   //player = 
   //enemie 1 = 
 }
@@ -216,13 +219,18 @@ function displayLevel() {
 
 
 function showTile(location, x, y){
+  // Converts # into walls 
   if (location === "#"){
-    fill(0);
-    rect(x*tileWidth, y*tileHeight, tilesWidth, tileHeight);
+    image(sample, x*tileWidth, y*tileHeight, tilesWidth, tileHeight);
   }
+  // Converts . into floors
   else if (location === "."){
     fill(255);
     rect(x*tileWidth, y*tileHeight, tilesWidth, tileHeight);
+  }
+  // Converts > into door/entrances
+  else if (location === ">"){
+
   }
 }
 
@@ -249,5 +257,11 @@ function updateHealthBar(){
   textSize(15);
   fill(255,0,0);
   text("Health : " + floor(player.health), width/15, height/16);
+}
+
+function keyPressed(){
+  if (key === "w" || key === UP_ARROW){
+
+  }
 }
 // keep player outside of text based grid
