@@ -42,7 +42,7 @@ function preload(){
 }
 
 function setup() {
-  createCanvas(1000,750);
+  createCanvas(1000, 750);
   state = "menu"
   textAlign(CENTER, CENTER);
 
