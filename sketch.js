@@ -35,7 +35,7 @@ function preload(){
   font = loadFont("assets/Ancient Modern Tales.otf")
   levelToLoad = "assets/levels/1.txt";
   lines = loadStrings(levelToLoad);
-  sample = loadImage ("sprites/brickWall.png");
+  sample = loadImage ("sprites/brick_dark0.png");
   player.sprite = loadImage("sprites/angel.png");
   //player = 
   //enemie 1 = 
@@ -136,6 +136,7 @@ function displayOptions(){
 }
 
 function optionsButtons(){
+  // Creates the button to go back to menu
   optionBackButton = new Clickable(width/2 - 100 , height/2 + 125)
   optionBackButton.resize(200, 70);
   optionBackButton.color = "#b00e0e";
@@ -164,7 +165,7 @@ function displayGameChoiceButtons(){
   // rect(width/4, height/3, 300, 500);
   // rect(width- width/4, height/3, 300, 500);
   
-  //Button to confirm Choice
+  // Creates the button to confirm Choice
   confirmButton = new Clickable(width/2 - 100, height - height/4)
   confirmButton.resize(200, 70);
   confirmButton.color = "#b00e0e";
@@ -210,6 +211,7 @@ function playerLevelUp(){
 }
 
 function displayLevel() {
+  // Draws the correct image to character
   for (let y = 0; y < tilesHigh; y++) {
     for (let x = 0; x < tilesWide; x++) {
       showTile(tiles[x][y], x, y);
@@ -225,8 +227,6 @@ function showTile(location, x, y){
   }
   // Converts . into floors
   else if (location === "."){
-    fill(255);
-    rect(x*tileWidth, y*tileHeight, tilesWidth, tileHeight);
   }
   // Converts > into door/entrances
   else if (location === ">"){
