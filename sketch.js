@@ -33,7 +33,7 @@ let player = {
 
 function preload(){
   font = loadFont("assets/Ancient Modern Tales.otf")
-  levelToLoad = "assets/levels/1.txt";
+  levelToLoad = "assets/levels/2.txt";
   lines = loadStrings(levelToLoad);
   sample = loadImage ("sprites/brick_dark0.png");
   player.sprite = loadImage("sprites/angel.png");
@@ -42,14 +42,14 @@ function preload(){
 }
 
 function setup() {
-  createCanvas(1000, 750);
+  createCanvas(1600, 900);
   state = "menu"
   textAlign(CENTER, CENTER);
 
   tilesHigh = lines.length;
   tilesWide = lines[0].length;
 
-  tileWidth = width / tilesWide;
+  tileWidth = width / tilesWide ;
   tileHeight = height / tilesHigh;
 
   tiles = createEmpty2dArray(tilesWide, tilesHigh);
@@ -205,7 +205,7 @@ function playerLevelUp(){
       player.health = player.health * 1.3;
       player.maxHealth = player.maxHealth * 1.3;
       player.level ++;
-      player.lastXp = player.xp + player.lastXp;
+      player.lastXp = player.lastXp + 500;
       updateHealthBar();
   }
 }
@@ -223,7 +223,7 @@ function displayLevel() {
 function showTile(location, x, y){
   // Converts # into walls 
   if (location === "#"){
-    image(sample, x*tileWidth, y*tileHeight, tilesWidth, tileHeight);
+    image(sample, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
   }
   // Converts . into floors
   else if (location === "."){
