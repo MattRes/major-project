@@ -33,16 +33,21 @@ let player = {
 
 function preload(){
   font = loadFont("assets/Ancient Modern Tales.otf")
-  levelToLoad = "assets/levels/2.txt";
+  levelToLoad = "assets/levels/1.txt";
   lines = loadStrings(levelToLoad);
-  sample = loadImage ("sprites/brick_dark0.png");
+  ground = loadImage ("sprites/brick_dark0.png");
+  blackEmpty = loadImage("sprites/black_empty.png")
+  whiteEmpty = loadImage("sprites/white_empty.png");
   player.sprite = loadImage("sprites/angel.png");
+
+
   //player = 
   //enemie 1 = 
 }
 
 function setup() {
-  createCanvas(1600, 900);
+  // 2:1 ratio
+  createCanvas(1500, 750 );
   state = "menu"
   textAlign(CENTER, CENTER);
 
@@ -223,14 +228,15 @@ function displayLevel() {
 function showTile(location, x, y){
   // Converts # into walls 
   if (location === "#"){
-    image(sample, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
+    image(ground, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
   }
   // Converts . into floors
   else if (location === "."){
+    image(whiteEmpty, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
   }
-  // Converts > into door/entrances
-  else if (location === ">"){
-
+  // Converts x into black spaces 
+  else if (location === "x"){
+    image(blackEmpty, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
   }
 }
 
@@ -256,12 +262,16 @@ function updateHealthBar(){
   rect(width/15, height/16, x, 10);
   textSize(15);
   fill(255,0,0);
+  console.log("ran")
   text("Health : " + floor(player.health), width/15, height/16);
 }
 
 function keyPressed(){
   if (key === "w" || key === UP_ARROW){
-
+    player.y -= -1;
+  }
+  if (key === "s" || key === DOWN_ARROW){
+    player.y -= 1
   }
 }
 // keep player outside of text based grid
