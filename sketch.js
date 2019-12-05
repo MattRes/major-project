@@ -26,6 +26,8 @@ let player = {
   health:  60, 
   attack: 1, 
   defense: 0,
+  x:0, 
+  y:0,
   level: 0,
   lastXp: 0,
   xp: 0
@@ -33,12 +35,15 @@ let player = {
 
 function preload(){
   font = loadFont("assets/Ancient Modern Tales.otf")
-  levelToLoad = "assets/levels/1.txt";
+  levelToLoad = "assets/levels/2.txt";
   lines = loadStrings(levelToLoad);
-  ground = loadImage ("sprites/brick_dark0.png");
+  wall = loadImage ("sprites/brick_dark0.png");
   blackEmpty = loadImage("sprites/black_empty.png")
   whiteEmpty = loadImage("sprites/white_empty.png");
+  floor = loadImage("sprites/cobble_blood3.png");
+  floor2 = loadImage("sprites/lair3.png");
   player.sprite = loadImage("sprites/angel.png");
+  
 
 
   //player = 
@@ -191,9 +196,8 @@ function displayGameChoiceButtons(){
 
 function gameLoop(){
   background(255);
-
   displayLevel();
-
+  playerMovement();
   updateHealthBar();
   gameLoopButtons();
   playerLevelUp();
@@ -228,11 +232,11 @@ function displayLevel() {
 function showTile(location, x, y){
   // Converts # into walls 
   if (location === "#"){
-    image(ground, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
+    image(wall, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
   }
   // Converts . into floors
   else if (location === "."){
-    image(whiteEmpty, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
+    image(floor2, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
   }
   // Converts x into black spaces 
   else if (location === "x"){
@@ -266,12 +270,24 @@ function updateHealthBar(){
   text("Health : " + floor(player.health), width/15, height/16);
 }
 
-function keyPressed(){
+function keyIsDown(){
   if (key === "w" || key === UP_ARROW){
-    player.y -= -1;
+    player.y -= 1;
   }
   if (key === "s" || key === DOWN_ARROW){
-    player.y -= 1
+    player.y += 1;
+  }
+  if (key === "a" || key === LEFT_ARROW){
+    player.x -= 1;
+  }
+  if (key === "d" || key === RIGHT_ARROW){
+    player.x += 1;  
   }
 }
+
+function playerMovement(){
+  image(player.sprite, player.x, player.y, tileWidth, tileHeight);
+}
+
+
 // keep player outside of text based grid
