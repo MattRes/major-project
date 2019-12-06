@@ -40,7 +40,7 @@ function preload(){
   wall = loadImage ("sprites/brick_dark0.png");
   blackEmpty = loadImage("sprites/black_empty.png")
   whiteEmpty = loadImage("sprites/white_empty.png");
-  floor = loadImage("sprites/cobble_blood3.png");
+  floor1 = loadImage("sprites/cobble_blood3.png");
   floor2 = loadImage("sprites/lair3.png");
   player.sprite = loadImage("sprites/angel.png");
   
@@ -197,7 +197,6 @@ function displayGameChoiceButtons(){
 function gameLoop(){
   background(255);
   displayLevel();
-  playerMovement();
   updateHealthBar();
   gameLoopButtons();
   playerLevelUp();
@@ -211,8 +210,8 @@ function playerLevelUp(){
   //Levels the player up incresing Health
   for (let i = 0; i < player.maxLevel; i++)
     if (player.xp >= player.lastXp + 500){
-      player.health = player.health * 1.3;
-      player.maxHealth = player.maxHealth * 1.3;
+      player.health = player.health * 1.1;
+      player.maxHealth = player.maxHealth * 1.1;
       player.level ++;
       player.lastXp = player.lastXp + 500;
       updateHealthBar();
@@ -258,21 +257,23 @@ function createEmpty2dArray(cols, rows) {
 
 function updateHealthBar(){
   // Creates a functioning Health bar with scalablity to level
-  x = map(player.health, 0, player.maxHealth, 0, 90);
+  x = map(player.health, 0, player.maxHealth, 0, 110);
   rectMode(CENTER);
   fill(0);
-  rect(width/15, height/16, 100, 20);
+  rect(width/15, height/16, 120, 25);
   fill(0,255,0);
-  rect(width/15, height/16, x, 10);
-  textSize(15);
+  rect(width/15, height/16, x, 15);
+  textSize(19);
   fill(255,0,0);
-  console.log("ran")
   text("Health : " + floor(player.health), width/15, height/16);
+  death();
 }
 
-function keyIsDown(){
+function keyPressed(){
   if (key === "w" || key === UP_ARROW){
     player.y -= 1;
+    player.health -= 5
+    console.log("ran");
   }
   if (key === "s" || key === DOWN_ARROW){
     player.y += 1;
@@ -283,11 +284,20 @@ function keyIsDown(){
   if (key === "d" || key === RIGHT_ARROW){
     player.x += 1;  
   }
+  image(player.sprite, player.x, player.y, tileWidth, tileHeight);
 }
 
 function playerMovement(){
   image(player.sprite, player.x, player.y, tileWidth, tileHeight);
 }
 
+function death(){
+  if (player.health <= 0){
+    fill(255, 0, 0);
+    textSize(60);
+    text("Game Over", width/2, height/2) 
+    text("Press SPACE to restart");
+  }
+}
 
 // keep player outside of text based grid
