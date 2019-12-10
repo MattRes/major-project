@@ -13,6 +13,8 @@
  let levelToLoad;
  let lines;
 
+ let pulse;
+
 
 
 
@@ -33,15 +35,20 @@ let player = {
   xp: 0
 };
 
+let movingUp = false, movingDown = false, movingLeft = false, movingRight = false;
+
 function preload(){
   font = loadFont("assets/Ancient Modern Tales.otf")
-  levelToLoad = "assets/levels/2.txt";
+  levelToLoad = "assets/levels/1.txt";
   lines = loadStrings(levelToLoad);
   wall = loadImage ("sprites/brick_dark0.png");
   blackEmpty = loadImage("sprites/black_empty.png")
   whiteEmpty = loadImage("sprites/white_empty.png");
   floor1 = loadImage("sprites/cobble_blood3.png");
-  floor2 = loadImage("sprites/lair3.png");
+  floor2 = loadImage("sprites/cobble_blood4.png");
+  floor3 = loadImage("sprites/cobble_blood5.png");
+  gFloor2 = loadImage("sprites/lair3.png");
+  enter = loadImage("sprites/dngn_enter.png");
   player.sprite = loadImage("sprites/angel.png");
   
 
@@ -115,8 +122,8 @@ function menuButtons(){
     startButton.draw();
   }
   startButton.onPress = function(){
-    clear();
     state = "gameChoice";
+    clear();
   }
   
 
@@ -134,8 +141,8 @@ function menuButtons(){
   }
   optionButton.onPress = function(){
     console.log("press")
-    clear();
     state = "option";
+    clear();
   }
 }
 
@@ -159,8 +166,8 @@ function optionsButtons(){
     optionBackButton.draw();
   }
   optionBackButton.onPress = function(){
-    clear();
     state = "menu";
+    clear();
   }
 }
 
@@ -188,15 +195,16 @@ function displayGameChoiceButtons(){
     confirmButton.draw();
   }
   confirmButton.onPress = function(){
-    clear();
     console.log("press")
     state = "gameLoop";
+    clear();
   }
 }
 
 function gameLoop(){
   background(255);
   displayLevel();
+  playerMovement();
   updateHealthBar();
   gameLoopButtons();
   playerLevelUp();
@@ -235,13 +243,33 @@ function showTile(location, x, y){
   }
   // Converts . into floors
   else if (location === "."){
-    image(floor2, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
+    image(floor1, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
   }
   // Converts x into black spaces 
-  else if (location === "x"){
+  else if (location === "X"){
     image(blackEmpty, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
   }
+  else if (location === ">"){
+    image(floor2, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
+    image(enter, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
+  }
 }
+
+// function floorRandomizer(){
+//   let floorNumber;
+//   floorNumber = random(1,3);
+//   if (floorNumber === 1){
+//     image(floor1, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
+//     console.log("3");
+//   }
+//   else if (floorNumber === 2){
+//     image(floor2, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
+//   }
+//   else if (floorNumber === 3){
+//     image(floor3, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
+//   }
+// }
+  
 
 function createEmpty2dArray(cols, rows) {
   //Creates a empty 2d array
@@ -268,35 +296,67 @@ function updateHealthBar(){
   text("Health : " + floor(player.health), width/15, height/16);
   death();
 }
-
-function keyPressed(){
-  if (key === "w" || key === UP_ARROW){
-    player.y -= 1;
-    player.health -= 5
-    console.log("ran");
-  }
-  if (key === "s" || key === DOWN_ARROW){
-    player.y += 1;
-  }
-  if (key === "a" || key === LEFT_ARROW){
-    player.x -= 1;
-  }
-  if (key === "d" || key === RIGHT_ARROW){
-    player.x += 1;  
-  }
-  image(player.sprite, player.x, player.y, tileWidth, tileHeight);
-}
-
 function playerMovement(){
   image(player.sprite, player.x, player.y, tileWidth, tileHeight);
+  if (movingUp) {
+    player.y -= 3;
+  }
+  if (movingDown) {
+    player.y += 3;
+  }
+  if (movingLeft) {
+    player.x -=3;
+  }
+  if (movingRight) {
+    player.x +=3;
+  }
+}
+
+function keyPressed() {
+  if (key === "w") {
+    movingUp = true;
+  }
+  if (key === "s") {
+    movingDown = true;
+  }
+  if (key === "a") {
+    movingLeft = true;
+  }
+  if (key === "d") {
+    movingRight = true;
+  }
+}
+
+function keyReleased() {
+  if (key === "w") {
+    movingUp = false;
+  }
+  if (key === "s") {
+    movingDown = false;
+  }
+  if (key === "a") {
+    movingLeft = false;
+  }
+  if (key === "d") {
+    movingRight = false;
+  }
 }
 
 function death(){
   if (player.health <= 0){
-    fill(255, 0, 0);
+    fill(255, 0, 0, 255);
     textSize(60);
-    text("Game Over", width/2, height/2) 
-    text("Press SPACE to restart");
+    text("Game Over", width/2, height/2);
+    textSize(27);
+    fill(255,0,0)
+    text("Press SPACEBAR TO RESTART", width/2, height/2 + 40);
+    console.log("death");
+  }
+
+  if (keyPressed){
+    if (keyCode === 32){
+      state = "menu";
+    }
   }
 }
 
