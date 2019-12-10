@@ -15,8 +15,9 @@
 
  let pulse;
 
+let touchingStair = false;
 
-
+let floorTile;
 
 
 let state; 
@@ -34,6 +35,8 @@ let player = {
   lastXp: 0,
   xp: 0
 };
+
+let floorNumber;
 
 let movingUp = false, movingDown = false, movingLeft = false, movingRight = false;
 
@@ -203,7 +206,7 @@ function displayGameChoiceButtons(){
 
 function gameLoop(){
   background(255);
-  displayLevel();
+  displaymap();
   playerMovement();
   updateHealthBar();
   gameLoopButtons();
@@ -235,6 +238,11 @@ function displayLevel() {
   }
 }
 
+function displaymap(){
+  displayLevel();
+  noLoop();
+}
+
 
 function showTile(location, x, y){
   // Converts # into walls 
@@ -243,7 +251,8 @@ function showTile(location, x, y){
   }
   // Converts . into floors
   else if (location === "."){
-    image(floor1, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
+    floorRandomizer();
+    image(floorTile, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
   }
   // Converts x into black spaces 
   else if (location === "X"){
@@ -255,20 +264,18 @@ function showTile(location, x, y){
   }
 }
 
-// function floorRandomizer(){
-//   let floorNumber;
-//   floorNumber = random(1,3);
-//   if (floorNumber === 1){
-//     image(floor1, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
-//     console.log("3");
-//   }
-//   else if (floorNumber === 2){
-//     image(floor2, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
-//   }
-//   else if (floorNumber === 3){
-//     image(floor3, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
-//   }
-// }
+function floorRandomizer(){
+  floorNumber = ceil(random(1,3));
+  if (floorNumber === 1){
+    floorTile = floor1;
+  }
+  else if (floorNumber === 2){
+    floorTile = floor2;
+  }
+  else if (floorNumber === 3){
+    floorTile = floor3;
+  }
+}
   
 
 function createEmpty2dArray(cols, rows) {
