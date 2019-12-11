@@ -36,6 +36,7 @@ let player = {
   xp: 0
 };
 
+
 let switcher = true;
 let alpha = 250;
 let floorNumber;
@@ -46,6 +47,7 @@ function preload(){
   font = loadFont("assets/Ancient Modern Tales.otf")
   levelToLoad = "assets/levels/1.txt";
   lines = loadStrings(levelToLoad);
+
   wall = loadImage ("sprites/brick_dark0.png");
   blackEmpty = loadImage("sprites/black_empty.png")
   whiteEmpty = loadImage("sprites/white_empty.png");
@@ -54,8 +56,11 @@ function preload(){
   floor3 = loadImage("sprites/cobble_blood5.png");
   gFloor2 = loadImage("sprites/lair3.png");
   enter = loadImage("sprites/dngn_enter.png");
+
   player.sprite = loadImage("sprites/angel.png");
-  
+  mage = loadImage("sprites/mage.png");
+  warrior = loadImage("sprites/warrior.png");
+  wizardBg = loadImage("sprites/wizard_background.jpg");
 
 
   //player = 
@@ -224,12 +229,21 @@ function displayGameChoiceButtons(){
 
 function displayPlayerSelect(){
   if (playerSelect === 0){
-    fill("red");
-    rect(width/2 - 125, height/2.5 - 200, 250, 250);
+    fill("black");
+    textSize(30);
+    text("Mage", width/2, height/2)
+    image(wizardBg, width/2 - 125, height/2.5 - 200, 250, 250);
+    image(mage, width/2 - 25, height/2.5 - 100, 50, 50);
+    player.sprite = mage;
   }
   if (playerSelect === 1){
+    fill(0);
+    textSize(30);
+    text("Warrior", width/2, height/2)
     fill("green");
-    rect(width/2 - 125, height/2.5 - 200, 250, 250);
+    image(warrior, width/2 - 25, height/2.5 - 100, 50, 50);
+    //rect(width/2 - 125, height/2.5 - 200, 250, 250);
+    player.sprite = warrior;
   }
   if (playerSelect === 2){
     fill("purple")
@@ -383,9 +397,9 @@ function keyReleased() {
     movingRight = false;
   }
 }
+
 function death(){
   if (player.health <= 0){
-    
     fill(255, 0, 0, 255);
     textSize(60);
     text("Game Over", width/2, height/2);
@@ -405,11 +419,10 @@ function death(){
       alpha += 5;
     }
     console.log(alpha);
-  }
-
-  if (keyPressed){
-    if (keyCode === 32){
+    if (keyPressed){
+      if (keyCode === 32){
       state = "menu";
-    }
+      }
+    } 
   }
 }
