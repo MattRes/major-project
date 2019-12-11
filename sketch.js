@@ -18,7 +18,7 @@
 let touchingStair = false;
 
 let floorTile;
-
+let playerSelect = 0;
 
 let state; 
 
@@ -36,6 +36,8 @@ let player = {
   xp: 0
 };
 
+let switcher = true;
+let alpha = 250;
 let floorNumber;
 
 let movingUp = false, movingDown = false, movingLeft = false, movingRight = false;
@@ -113,6 +115,7 @@ function displayMenu(){
 
 function menuButtons(){
 //Creates start button
+  rectMode(CORNER);
   startButton = new Clickable(width/2 - 100, height/2);
   startButton.resize(200, 70);
   startButton.color = "#b00e0e";
@@ -176,22 +179,37 @@ function optionsButtons(){
 
 function displayGameChoice(){
   background(43,75,210);
+  rectMode(CENTER);
+  fill(255);
+  stroke(0);
+  strokeWeight(20);
+  rect(width/2, height/2.5, 300, 450);
   displayGameChoiceButtons();
 
 }
 
+let playerSelectBool;
 function displayGameChoiceButtons(){
-  // fill(0);
-  // rect(width/4, height/3, 300, 500);
-  // rect(width- width/4, height/3, 300, 500);
-  
+  rectMode(CORNER);
+
+  nextButton = new Clickable(width/2 - 22.5, height/1.6);
+  nextButton.resize(45,30);
+  nextButton.color = "#b00e0e";
+  nextButton.textFont = font;
+  nextButton.textSize = 25;
+  nextButton.text = "Next";
+  nextButton.draw();
+  nextButton.onPress = function(){
+    playerSelect ++;
+  }
+  displayPlayerSelect();
   // Creates the button to confirm Choice
-  confirmButton = new Clickable(width/2 - 100, height - height/4)
+  confirmButton = new Clickable(width/2 - 100, height - height/4);
   confirmButton.resize(200, 70);
   confirmButton.color = "#b00e0e";
   confirmButton.textSize = 20;
   confirmButton.textFont = font;
-  confirmButton.text = "Confirm"
+  confirmButton.text = "Confirm";
   confirmButton.draw();
   confirmButton.onHover = function(){
     confirmButton.color = "#800606"
@@ -204,9 +222,27 @@ function displayGameChoiceButtons(){
   }
 }
 
+function displayPlayerSelect(){
+  if (playerSelect === 0){
+    fill("red");
+    rect(width/2 - 125, height/2.5 - 200, 250, 250);
+  }
+  if (playerSelect === 1){
+    fill("green");
+    rect(width/2 - 125, height/2.5 - 200, 250, 250);
+  }
+  if (playerSelect === 2){
+    fill("purple")
+    rect(width/2 - 125, height/2.5 - 200, 250, 250);
+  }
+  else if (playerSelect === 3){
+    playerSelect = 0;
+  }
+}
+
+
 function gameLoop(){
-  background(255);
-  displaymap();
+  displayMap();
   playerMovement();
   updateHealthBar();
   gameLoopButtons();
@@ -236,11 +272,10 @@ function displayLevel() {
       showTile(tiles[x][y], x, y);
     }
   }
-}
+} 
 
-function displaymap(){
+function displayMap(){
   displayLevel();
-  noLoop();
 }
 
 
@@ -348,16 +383,28 @@ function keyReleased() {
     movingRight = false;
   }
 }
-
 function death(){
   if (player.health <= 0){
+    
     fill(255, 0, 0, 255);
     textSize(60);
     text("Game Over", width/2, height/2);
     textSize(27);
-    fill(255,0,0)
+    fill(255,0,0, alpha)
     text("Press SPACEBAR TO RESTART", width/2, height/2 + 40);
-    console.log("death");
+    if (alpha <= 255 && switcher === true){
+      alpha -= 5
+    }
+    if (alpha === 255){
+      switcher = true;
+    }
+    if (alpha === 0){
+      switcher = false;
+    }
+    if (alpha >= 0 && switcher === false){
+      alpha += 5;
+    }
+    console.log(alpha);
   }
 
   if (keyPressed){
@@ -366,5 +413,3 @@ function death(){
     }
   }
 }
-
-// keep player outside of text based grid
