@@ -58,9 +58,16 @@ function preload(){
   enter = loadImage("sprites/dngn_enter.png");
 
   player.sprite = loadImage("sprites/angel.png");
+
   mage = loadImage("sprites/mage.png");
+  wizardBg = loadImage("sprites/wizardbg.png");
+
   warrior = loadImage("sprites/warrior.png");
-  wizardBg = loadImage("sprites/wizard_background.jpg");
+  warriorBg = loadImage("sprites/warriorbg.jpg");
+
+  ranger = loadImage("sprites/ranger.png");
+  rangerBg = loadImage("sprites/rangerbg.jfif");
+
 
 
   //player = 
@@ -233,21 +240,22 @@ function displayPlayerSelect(){
     textSize(30);
     text("Mage", width/2, height/2)
     image(wizardBg, width/2 - 125, height/2.5 - 200, 250, 250);
-    image(mage, width/2 - 25, height/2.5 - 100, 50, 50);
+    image(mage, width/2 - 37.5, height/2.5 - 60, 75, 75);
     player.sprite = mage;
   }
   if (playerSelect === 1){
     fill(0);
     textSize(30);
     text("Warrior", width/2, height/2)
-    fill("green");
-    image(warrior, width/2 - 25, height/2.5 - 100, 50, 50);
-    //rect(width/2 - 125, height/2.5 - 200, 250, 250);
+    image(warriorBg, width/2 - 125, height/2.5 - 200, 250, 250);
+    image(warrior, width/2 - 37.5, height/2.5 - 50, 75, 75);
     player.sprite = warrior;
   }
   if (playerSelect === 2){
-    fill("purple")
-    rect(width/2 - 125, height/2.5 - 200, 250, 250);
+    textSize(30);
+    text("Ranger", width/2, height/2)
+    image(rangerBg, width/2 - 125, height/2.5 - 200, 250, 250);
+    image(ranger, width/2 - 37.5, height/2.5 - 37.5 , 75, 75);
   }
   else if (playerSelect === 3){
     playerSelect = 0;
