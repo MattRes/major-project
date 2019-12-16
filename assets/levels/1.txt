@@ -1,6 +1,6 @@
 XXXXX########XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 XXXX##......#XXX#########################XXXXXXXXXXXXXXXXXXX
-XXX#.......######.......................#####XXXXXXXXXXXXXXX
+XXX#...S...######.......................#####XXXXXXXXXXXXXXX
 XXXX#.......................................######XXXXXXXXXX
 XXXXX##.....###############......................######XXXXX
 XXXXXXX#######XXXXXXXXXXXX##########..................##XXXX

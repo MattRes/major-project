@@ -45,27 +45,25 @@ let movingUp = false, movingDown = false, movingLeft = false, movingRight = fals
 
 function preload(){
   font = loadFont("assets/Ancient Modern Tales.otf")
-  levelToLoad = "assets/levels/1.txt";
+  levelToLoad = "assets/levels/2.txt";
   lines = loadStrings(levelToLoad);
 
-  wall = loadImage ("sprites/brick_dark0.png");
-  blackEmpty = loadImage("sprites/black_empty.png")
-  whiteEmpty = loadImage("sprites/white_empty.png");
-  floor1 = loadImage("sprites/cobble_blood3.png");
-  floor2 = loadImage("sprites/cobble_blood4.png");
-  floor3 = loadImage("sprites/cobble_blood5.png");
-  gFloor2 = loadImage("sprites/lair3.png");
-  enter = loadImage("sprites/dngn_enter.png");
+  wall = loadImage ("sprites/mapassets/brick_dark0.png");
+  blackEmpty = loadImage("sprites/mapassets/black_empty.png")
+  whiteEmpty = loadImage("sprites/mapassets/white_empty.png");
+  floor1 = loadImage("sprites/mapassets/cobble_blood3.png");
+  floor2 = loadImage("sprites/mapassets/cobble_blood4.png");
+  floor3 = loadImage("sprites/mapassets/cobble_blood5.png");
+  gFloor2 = loadImage("sprites/mapassets/lair3.png");
+  enter = loadImage("sprites/mapassets/dngn_enter.png");
 
-  player.sprite = loadImage("sprites/angel.png");
-
-  mage = loadImage("sprites/mage.png");
+  mage = loadImage("sprites/player/mage.png");
   wizardBg = loadImage("sprites/wizardbg.png");
 
-  warrior = loadImage("sprites/warrior.png");
+  warrior = loadImage("sprites/player/warrior.png");
   warriorBg = loadImage("sprites/warriorbg.jpg");
 
-  ranger = loadImage("sprites/ranger.png");
+  ranger = loadImage("sprites/player/ranger.png");
   rangerBg = loadImage("sprites/rangerbg.jfif");
 
 
@@ -319,6 +317,10 @@ function showTile(location, x, y){
     image(floor2, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
     image(enter, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
   }
+  else if (location === "S"){
+    image(floor2, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
+    
+  }
 }
 
 function floorRandomizer(){
@@ -361,7 +363,7 @@ function updateHealthBar(){
   death();
 }
 function playerMovement(){
-  image(player.sprite, player.x, player.y, tileWidth, tileHeight);
+  image(player.sprite, spawnX, spawnY, tileWidth, tileHeight);
   if (movingUp) {
     player.y -= 3;
   }
