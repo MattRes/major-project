@@ -7,6 +7,7 @@
 
 // Tile set taken from https://opengameart.org/content/dungeon-crawl-32x32-tiles
 // Font style taken from https://www.fontspace.com/chequered-ink/ancient-modern-tales
+ let playMap;
  let tiles;
  let tilesHigh, tilesWide;
  let tilesWidth, tilesHeight;
@@ -84,13 +85,13 @@ function setup() {
   tileWidth = width / tilesWide ;
   tileHeight = height / tilesHigh;
 
-  tiles = createEmpty2dArray(tilesWide, tilesHigh);
+  playMap = createEmpty2dArray(tilesWide, tilesHigh);
 
   //put values into 2d array of characters
   for (let y = 0; y < tilesHigh; y++) {
     for (let x = 0; x < tilesWide; x++) {
       let tileType = lines[y][x];
-      tiles[x][y] = tileType;
+      playMap[x][y] = tileType;
     }
   }
 }
@@ -289,7 +290,7 @@ function displayLevel() {
   // Draws the correct image to character
   for (let y = 0; y < tilesHigh; y++) {
     for (let x = 0; x < tilesWide; x++) {
-      showTile(tiles[x][y], x, y);
+      showTile(playMap[x][y], x, y);
     }
   }
 } 
@@ -306,8 +307,8 @@ function showTile(location, x, y){
   }
   // Converts . into floors
   else if (location === "."){
-    floorRandomizer();
-    image(floorTile, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
+    //floorRandomizer();
+    image(floor3 , x*tileWidth, y*tileHeight, tileWidth, tileHeight);
   }
   // Converts x into black spaces 
   else if (location === "X"){
@@ -351,19 +352,20 @@ function createEmpty2dArray(cols, rows) {
 
 function updateHealthBar(){
   // Creates a functioning Health bar with scalablity to level
-  x = map(player.health, 0, player.maxHealth, 0, 110);
+  reScale = map(player.health, 0, player.maxHealth, 0, 110);
   rectMode(CENTER);
   fill(0);
   rect(width/15, height/16, 120, 25);
   fill(0,255,0);
-  rect(width/15, height/16, x, 15);
+  rect(width/15, height/16, reScale, 15);
   textSize(19);
   fill(255,0,0);
   text("Health : " + floor(player.health), width/15, height/16);
   death();
 }
+
 function playerMovement(){
-  image(player.sprite, spawnX, spawnY, tileWidth, tileHeight);
+  image(player.sprite, player.x, player.y, tileWidth, tileHeight);
   if (movingUp) {
     player.y -= 3;
   }
@@ -378,20 +380,41 @@ function playerMovement(){
   }
 }
 
+function checkPlayerLocation(){
+  
+}
+
+
+
+let inventoryOpen = false;
 function keyPressed() {
-  if (key === "w") {
+  if (key === "w" || keyCode === UP_ARROW) {
     movingUp = true;
   }
-  if (key === "s") {
+  if (key === "s" || keyCode === DOWN_ARROW) {
     movingDown = true;
   }
-  if (key === "a") {
+  if (key === "a" || keyCode === LEFT_ARROW) {
     movingLeft = true;
   }
-  if (key === "d") {
+  if (key === "d" || keyCode === RIGHT_ARROW) {
     movingRight = true;
   }
+  // if (key === "e" && inventoryOpen === false){
+  //   inventoryOpen = true;
+  //   openInventory();
+  //   if (inventoryOpen){
+  //     inventoryOpen = false;
+  //   }
+  // }
 }
+
+// function openInventory(){
+//   fill(0,255,0);
+//   if (inventoryOpen){
+//     rect(width/2, height/2, 1000, 1000);
+//   }
+// }
 
 function keyReleased() {
   if (key === "w") {
