@@ -46,7 +46,10 @@ let movingUp = false, movingDown = false, movingLeft = false, movingRight = fals
 
 function preload(){
   font = loadFont("assets/Ancient Modern Tales.otf")
-  levelToLoad = "assets/levels/2.txt";
+  levelToLoad = "assets/levels/3.txt";
+  level1 = "assets/levels/1.txt";
+  level2 = "assets/levels/2.txt";
+  level3  = "assets/levels/3.txt";
   lines = loadStrings(levelToLoad);
 
   wall = loadImage ("sprites/mapassets/brick_dark0.png");
@@ -68,9 +71,6 @@ function preload(){
   rangerBg = loadImage("sprites/rangerbg.jfif");
 
 
-
-  //player = 
-  //enemie 1 = 
 }
 
 function setup() {
@@ -203,6 +203,7 @@ let playerSelectBool;
 function displayGameChoiceButtons(){
   rectMode(CORNER);
 
+  // Creates a button to toggle through playable characters 
   nextButton = new Clickable(width/2 - 22.5, height/1.6);
   nextButton.resize(45,30);
   nextButton.color = "#b00e0e";
@@ -214,6 +215,7 @@ function displayGameChoiceButtons(){
     playerSelect ++;
   }
   displayPlayerSelect();
+
   // Creates the button to confirm Choice
   confirmButton = new Clickable(width/2 - 100, height - height/4);
   confirmButton.resize(200, 70);
@@ -234,6 +236,7 @@ function displayGameChoiceButtons(){
 }
 
 function displayPlayerSelect(){
+  // Allows for the character to select a player from Mage, Warrior and Ranger
   if (playerSelect === 0){
     fill("black");
     textSize(30);
@@ -241,6 +244,7 @@ function displayPlayerSelect(){
     image(wizardBg, width/2 - 125, height/2.5 - 200, 250, 250);
     image(mage, width/2 - 37.5, height/2.5 - 60, 75, 75);
     player.sprite = mage;
+    mageStats();
   }
   if (playerSelect === 1){
     fill(0);
@@ -249,18 +253,54 @@ function displayPlayerSelect(){
     image(warriorBg, width/2 - 125, height/2.5 - 200, 250, 250);
     image(warrior, width/2 - 37.5, height/2.5 - 50, 75, 75);
     player.sprite = warrior;
+    warriorStats();
   }
   if (playerSelect === 2){
     textSize(30);
-    text("Ranger", width/2, height/2)
+    text("Ranger", width/2, height/2 - height/44)
     image(rangerBg, width/2 - 125, height/2.5 - 200, 250, 250);
     image(ranger, width/2 - 37.5, height/2.5 - 37.5 , 75, 75);
+    player.sprite = ranger;
+    rangerStats();
+
   }
   else if (playerSelect === 3){
     playerSelect = 0;
   }
 }
 
+function mageStats(){
+  textSize(15);
+  text("Health:" + player.maxHealth, width/2, height/2 + height/30);
+  text("Attack:" + player.attack, width/2, height/2 + height/16);
+  text("Defense:" + player.defense, width/2, height/2 + height/11);
+  player.maxHealth = 40;
+  player.health = 40; 
+  player.attack = 3;
+  player.defense = 0;
+}
+
+function warriorStats(){
+  textSize(15);
+  text("Health:" + player.maxHealth, width/2, height/2 + height/30);
+  text("Attack:" + player.attack, width/2, height/2 + height/16);
+  text("Defense:" + player.defense, width/2, height/2 + height/10);
+  player.maxHealth = 65;
+  player.health = 65; 
+  player.attack = 1.5;
+  player.defense = 3;
+}
+
+function rangerStats(){
+  textSize(15);
+  text("Health:" + player.maxHealth, width/2, height/2 + height/30);
+  text("Attack:" + player.attack, width/2, height/2 + height/16);
+  text("Defense:" + player.defense, width/2, height/2 + height/10);
+  player.maxHealth = 55;
+  player.health = 55; 
+  player.attack = 1.5;
+  player.defense = 1;
+}
 
 function gameLoop(){
   displayMap();
@@ -282,10 +322,11 @@ function playerLevelUp(){
       player.maxHealth = player.maxHealth * 1.1;
       player.level ++;
       player.lastXp = player.lastXp + 500;
-      updateHealthBar();
   }
 }
 
+
+let mapShown;
 function displayLevel() {
   // Draws the correct image to character
   for (let y = 0; y < tilesHigh; y++) {
@@ -293,6 +334,7 @@ function displayLevel() {
       showTile(playMap[x][y], x, y);
     }
   }
+  mapShown = true;
 } 
 
 function displayMap(){
@@ -301,30 +343,33 @@ function displayMap(){
 
 
 function showTile(location, x, y){
-  // Converts # into walls 
   if (location === "#"){
+    // Converts # into walls 
     image(wall, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
   }
-  // Converts . into floors
   else if (location === "."){
-    //floorRandomizer();
-    image(floor3 , x*tileWidth, y*tileHeight, tileWidth, tileHeight);
+    // Converts . into floors
+    floorRandomizer();
+    image(floor3, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
   }
-  // Converts x into black spaces 
   else if (location === "X"){
+    // Converts x into black spaces 
     image(blackEmpty, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
   }
   else if (location === ">"){
+    // Converts > into stairs
     image(floor2, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
     image(enter, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
   }
   else if (location === "S"){
+    // Converts S into spawn points
     image(floor2, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
     
   }
 }
 
 function floorRandomizer(){
+  // Randomizes the floors tiles make it slightly less painful to look at 
   floorNumber = ceil(random(1,3));
   if (floorNumber === 1){
     floorTile = floor1;
@@ -365,6 +410,7 @@ function updateHealthBar(){
 }
 
 function playerMovement(){
+  // Displays the characters movement
   image(player.sprite, player.x, player.y, tileWidth, tileHeight);
   if (movingUp) {
     player.y -= 3;
@@ -381,13 +427,18 @@ function playerMovement(){
 }
 
 function checkPlayerLocation(){
-  
+  if (mapshown){
+    if (playMap === "#"){
+
+    }
+  }
 }
 
 
 
 let inventoryOpen = false;
 function keyPressed() {
+  // Moves player with WASD or arrow keys
   if (key === "w" || keyCode === UP_ARROW) {
     movingUp = true;
   }
@@ -417,6 +468,7 @@ function keyPressed() {
 // }
 
 function keyReleased() {
+  // Stops player from moving while the key is realeased 
   if (key === "w") {
     movingUp = false;
   }
@@ -432,6 +484,7 @@ function keyReleased() {
 }
 
 function death(){
+  // Allows the player to die when their health reaches 0
   if (player.health <= 0){
     fill(255, 0, 0, 255);
     textSize(60);
@@ -439,6 +492,8 @@ function death(){
     textSize(27);
     fill(255,0,0, alpha)
     text("Press SPACEBAR TO RESTART", width/2, height/2 + 40);
+
+    // Adjusts the alpha of the press to restart text to give it a blinking animation
     if (alpha <= 255 && switcher === true){
       alpha -= 5
     }
@@ -452,6 +507,7 @@ function death(){
       alpha += 5;
     }
     console.log(alpha);
+    // Sends playe back to the main menu
     if (keyPressed){
       if (keyCode === 32){
       state = "menu";
