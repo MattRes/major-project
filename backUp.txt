@@ -42,9 +42,11 @@ let switcher = true;
 let alpha = 250;
 let floorNumber;
 
+let movingUp = false, movingDown = false, movingLeft = false, movingRight = false;
+
 function preload(){
   font = loadFont("assets/Ancient Modern Tales.otf")
-  levelToLoad = "assets/levels/1.txt";
+  levelToLoad = "assets/levels/3.txt";
   level1 = "assets/levels/1.txt";
   level2 = "assets/levels/2.txt";
   level3  = "assets/levels/3.txt";
@@ -84,6 +86,7 @@ function setup() {
   tileHeight = height / tilesHigh;
 
   playMap = createEmpty2dArray(tilesWide, tilesHigh);
+  char = playMap[player.x][player.y];
 
   //put values into 2d array of characters
   for (let y = 0; y < tilesHigh; y++) {
@@ -302,6 +305,7 @@ function rangerStats(){
 
 function gameLoop(){
   displayMap();
+//playerMovement();
   updateHealthBar();
   gameLoopButtons();
   playerLevelUp();
@@ -331,8 +335,7 @@ function displayLevel() {
       showTile(playMap[x][y], x, y);
     }
   }
-  if (playMap[player.x][player.y] === 1)
-    image(player.sprite, playMap[player.x], playMap[player.y], 40,40)
+  mapShown = true;
 } 
 
 function displayMap(){
@@ -440,19 +443,68 @@ function death(){
   }
 }
 
-function keyPressed(){
-  playMap[player.x][player.y] = 1;
-  if (key === "w" || keyCode === UP_ARROW){
-    player.y -= 1;
+// function playerMovement(){
+//   // Displays the characters movement
+//   image(player.sprite, player.x, player.y, tileWidth, tileHeight);
+//   if (movingUp) {
+//     player.y -= 3;
+//   }
+//   if (movingDown) {
+//     player.y += 3;
+//   }
+//   if (movingLeft) {
+//     player.x -=3;
+//   }
+//   if (movingRight) {
+//     player.x +=3;
+//   }
+// }
+
+// function keyPressed() {
+//   // Moves player with WASD or arrow keys
+//   if (key === "w" || keyCode === UP_ARROW) {
+//     movingUp = true;
+//   }
+//   if (key === "s" || keyCode === DOWN_ARROW) {
+//     movingDown = true;
+//   }
+//   if (key === "a" || keyCode === LEFT_ARROW) {
+//     movingLeft = true;
+//   }
+//   if (key === "d" || keyCode === RIGHT_ARROW) {
+//     movingRight = true;
+//   }
+// }  
+
+function keyPressed() {
+  // Moves player with WASD or arrow keys
+  if (key === "w" || keyCode === UP_ARROW) {
+    movingUp = true;
   }
-  if (key === "s" || keyCode === DOWN_ARROW){
-    player.y += 1;
+  if (key === "s" || keyCode === DOWN_ARROW) {
+    movingDown = true;
   }
-  if (key === "d" || keyCode === UP_ARROW){
-    player.x += 1;
+  if (key === "a" || keyCode === LEFT_ARROW) {
+    movingLeft = true;
   }
-  if (key === "a" || keyCode === UP_ARROW){
-    player.x -= 1;
+  if (key === "d" || keyCode === RIGHT_ARROW) {
+    movingRight = true;
   }
-  playMap[player.x][player.y] = 0;
-}
+} 
+
+// function keyReleased() {
+//   // Stops player from moving while the key is realeased 
+//   if (key === "w") {
+//     movingUp = false;
+//   }
+//   if (key === "s") {
+//     movingDown = false;
+//   }
+//   if (key === "a") {
+//     movingLeft = false;
+//   }
+//   if (key === "d") {
+//     movingRight = false;
+//   }
+// }
+
