@@ -1,7 +1,7 @@
 XXXXX########XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 XXXX##......#XXX#########################XXXXXXXXXXXXXXXXXXX
-XXX#...S...######.......................#####XXXXXXXXXXXXXXX
-XXXX#.......................................######XXXXXXXXXX
+XXX#...P...######.......................#####XXXXXXXXXXXXXXX
+XXXX#.............................O.........######XXXXXXXXXX
 XXXXX##.....###############......................######XXXXX
 XXXXXXX#######XXXXXXXXXXXX##########..................##XXXX
 XXXXXX##......#######XXXXXXXXXXXXX###########..........#XXXX
@@ -12,11 +12,11 @@ XXXXXXXXX##............###XXXXXXXXXXXXXXXXX###.....###XXXXXX
 XXXXXXX############.......#XXXXXXXXXXXXXXX#......##XXXXXXXXX
 XXXXX##....................##XXXXXXXXXXXXXX##...###XXXXXXXXX
 XXXX#........................#XXXXXXXXXXXXXXX#.....###XXXXXX
-XXXXX###...................##XXXXXXXXXXXXXXXXX###.....##XXXX
+XXXXX###.......O...........##XXXXXXXXXXXXXXXXX###.....##XXXX
 XXX#....................###XXXXXXXXXXXXXXXXXXXX#####....#XXX
 XXXX##................##XXXXXXXXXXXXXXXXX######.........#XXX
 XXXXXX#####...########XXXXXXXX###########.......########XXXX
-XXXXXXXXXX#...#XXXX#####XXXXX#....................##XXXXXXXX
+XXXXXXXXXX#...#XXXX#####XXXXX#...............O....##XXXXXXXX
 XXXXXXXX##....#XXX#.....#XXXXX############..........###XXXXX
 XXXXXX##....##XXXX#......#XXXXXXXXXXXXXXXX#######......#XXXX
 XXXX##....##XXXXXXX#....#XXXXXXX######XXXXXXXXXXX######XXXXX
@@ -26,5 +26,5 @@ XXXX####......##........##XXX#...........#######XXXXXXXXXXXX
 XXXXXXXX###...............############..........#XXXXXXXXXXX
 XXXXXXXXXXX###########.........#########.......#XXXXXXXXXXXX
 XXXXXXXXXXXXXXXXXXXXX#.......................##XXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXX######...............##XXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXX######........O......##XXXXXXXXXXXXXXX
 XXXXXXXXXXXXXXXXXXXXXXXXXXXX###############XXXXXXXXXXXXXXXXX

@@ -30,8 +30,8 @@ let player = {
   health:  60, 
   attack: 1, 
   defense: 0,
-  x:5, 
-  y:5,
+  x:6, 
+  y:3,
   level: 0,
   lastXp: 0,
   xp: 0
@@ -68,7 +68,8 @@ function preload(){
   ranger = loadImage("sprites/player/ranger.png");
   rangerBg = loadImage("sprites/rangerbg.jfif");
 
-
+  orc = loadImage("sprites/enemies/orc_warrior.png");
+  turtle = loadImage("sprites/enemies/turtle.png");
 }
 
 function setup() {
@@ -323,7 +324,6 @@ function playerLevelUp(){
 }
 
 
-let mapShown;
 function displayLevel() {
   // Draws the correct image to character
   for (let y = 0; y < tilesHigh; y++) {
@@ -331,8 +331,6 @@ function displayLevel() {
       showTile(playMap[x][y], x, y);
     }
   }
-  if (playMap[player.x][player.y] === 1)
-    image(player.sprite, playMap[player.x], playMap[player.y], 40,40)
 } 
 
 function displayMap(){
@@ -344,6 +342,7 @@ function showTile(location, x, y){
   if (location === "#"){
     // Converts # into walls 
     image(wall, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
+    movable = true;
   }
   else if (location === "."){
     // Converts . into floors
@@ -359,10 +358,17 @@ function showTile(location, x, y){
     image(floor2, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
     image(enter, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
   }
-  else if (location === "S"){
+  else if (location === "O"){
+    image(floor2, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
+    image(orc, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
+
+  }
+  else if (location === "P"){
     // Converts S into spawn points
     image(floor2, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
-    
+    image(player.sprite, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
+    player.x = x;
+    player.y = y;
   }
 }
 
@@ -441,18 +447,22 @@ function death(){
 }
 
 function keyPressed(){
-  playMap[player.x][player.y] = 1;
+  playMap[player.x][player.y] = ".";
   if (key === "w" || keyCode === UP_ARROW){
-    player.y -= 1;
+    if (playMap[player.y]+ 1 === "#"){
+      player.y = player.y - 1
+    }
+    else player.y -= 1;
   }
   if (key === "s" || keyCode === DOWN_ARROW){
     player.y += 1;
   }
-  if (key === "d" || keyCode === UP_ARROW){
+  if (key === "d" || keyCode === LEFT_ARROW){
     player.x += 1;
   }
-  if (key === "a" || keyCode === UP_ARROW){
+  if (key === "a" || keyCode === RIGHT_ARROW){
     player.x -= 1;
   }
-  playMap[player.x][player.y] = 0;
+  playMap[player.x][player.y] = "P";
+  
 }
