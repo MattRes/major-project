@@ -43,13 +43,18 @@ let alpha = 250;
 let floorNumber;
 
 function preload(){
+  //FANCY GAME FONT
   font = loadFont("assets/Ancient Modern Tales.otf")
+
   levelToLoad = "assets/levels/1.txt";
+
+  // LEVELS 
   level1 = "assets/levels/1.txt";
   level2 = "assets/levels/2.txt";
   level3  = "assets/levels/3.txt";
   lines = loadStrings(levelToLoad);
 
+  // MAP ASSETS
   wall = loadImage ("sprites/mapassets/brick_dark0.png");
   blackEmpty = loadImage("sprites/mapassets/black_empty.png")
   whiteEmpty = loadImage("sprites/mapassets/white_empty.png");
@@ -59,6 +64,7 @@ function preload(){
   gFloor2 = loadImage("sprites/mapassets/lair3.png");
   enter = loadImage("sprites/mapassets/dngn_enter.png");
 
+  // PLAYER SPRITES
   mage = loadImage("sprites/player/mage.png");
   wizardBg = loadImage("sprites/wizardbg.png");
 
@@ -70,6 +76,20 @@ function preload(){
 
   orc = loadImage("sprites/enemies/orc_warrior.png");
   turtle = loadImage("sprites/enemies/turtle.png");
+
+  // ITEMS
+  healthPotion = loadImage("sprites/items/Potions/health_potion.png");
+  poisonPotion = loadImage("sprites/items/Potions/posion_potion.png");
+
+  //MELEE WEAPONS 
+  battleAxe = loadImage("sprites/items/Melee/battle_axe1.png");
+  executioner = loadImage("sprites/items/Melee/executioner_axe1.png");
+  falchion = loadImage("sprites/items/Melee/falchion1.png");
+  club = loadImage("sprites/items/Melee/giant_club.png");
+  halberd = loadImage("sprites/items/Melee/halberd2.png");
+  smallAxe = loadImage("sprites/items/Melee/hand_axe2.png");
+  longSword = loadImage("sprites/items/Melee/long_sword.1.png");
+
 }
 
 function setup() {
@@ -411,6 +431,10 @@ function updateHealthBar(){
   fill(255,0,0);
   text("Health : " + floor(player.health), width/15, height/16);
   death();
+  xCoor = player.x
+  yCoor = player.y
+
+  console.log(xCoor, yCoor, );
 }
 
 function death(){
@@ -445,24 +469,45 @@ function death(){
     } 
   }
 }
-
+let infront;
 function keyPressed(){
   playMap[player.x][player.y] = ".";
   if (key === "w" || keyCode === UP_ARROW){
-    if (playMap[player.y]+ 1 === "#"){
-      player.y = player.y - 1
+    if (playMap[player.x][player.y-1] != "#" ){
+      player.y -= 1;
     }
-    else player.y -= 1;
   }
   if (key === "s" || keyCode === DOWN_ARROW){
-    player.y += 1;
+    if (playMap[player.x][player.y+1] != "#" ){
+      player.y += 1;
+    }
   }
   if (key === "d" || keyCode === LEFT_ARROW){
-    player.x += 1;
+    if (playMap[player.x+1][player.y] != "#" ){
+      player.x += 1;
+    }
   }
   if (key === "a" || keyCode === RIGHT_ARROW){
-    player.x -= 1;
+    if (playMap[player.x-1][player.y] != "#" ){
+      player.x -= 1;
+    }
   }
   playMap[player.x][player.y] = "P";
-  
 }
+
+// function stairs(){
+//   if (playMap[player.x][player.y] === "<"){
+//       levelToLoad = l;
+//       l++
+
+//     }
+//   } 
+
+// class enemy{
+//   constructor(type, x, y){
+//     this.type = type;
+//     this.x = x;
+//     this.y = y; 
+
+//   }
+// }
