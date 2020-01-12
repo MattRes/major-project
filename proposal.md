@@ -5,8 +5,8 @@ I'm going to make an RPG game, where one can explore diffrent rooms/levels. They
 
 
 ## Need to have list
-- Playable character 
-- Multiple rooms/levels (where the player will encounter chests, items and enemies)
+- Playable character (Done)
+- Multiple rooms/levels (where the player will encounter chests, items and enemies) (Done)
 - Health and Damage system
 - Enemies
 - Sound effects (buttons, attacks and background)
@@ -14,8 +14,8 @@ I'm going to make an RPG game, where one can explore diffrent rooms/levels. They
 - Items (armor, weapons, consumables) 
 
 ## Nice to have list 
-- Appealing graphics (levels, enemies, chests, etc.)
-- Diffrent Classes (2-4 (Archer, Warrior, Mage, ?? ))
+- Appealing graphics (levels, enemies, chests, etc.) (Done)
+- Diffrent Classes (2-4 (Archer, Warrior, Mage, ?? )) (Done)
 - Mana points (depending if classes get added)
 - Inventory (abilty to store consumables and items in a grid)
 - Class specific abilities (depending if classes get added)

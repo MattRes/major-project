@@ -16,8 +16,6 @@
 
  let pulse;
 
-let touchingStair = false;
-
 let floorTile;
 let playerSelect = 0;
 
@@ -30,14 +28,15 @@ let player = {
   health:  60, 
   attack: 1, 
   defense: 0,
-  x:6, 
-  y:3,
+  x:0, 
+  y:0,
+  direction: "right",
   level: 0,
   lastXp: 0,
   xp: 0
 };
 
-
+chestOpened = false;
 let switcher = true;
 let alpha = 250;
 let floorNumber;
@@ -63,6 +62,8 @@ function preload(){
   floor3 = loadImage("sprites/mapassets/cobble_blood5.png");
   gFloor2 = loadImage("sprites/mapassets/lair3.png");
   enter = loadImage("sprites/mapassets/dngn_enter.png");
+  chest = loadImage("sprites/mapassets/chest.png");
+  chestOpen = loadImage("sprites/mapassets/chest_open.png")
 
   // PLAYER SPRITES
   mage = loadImage("sprites/player/mage.png");
@@ -88,8 +89,14 @@ function preload(){
   club = loadImage("sprites/items/Melee/giant_club.png");
   halberd = loadImage("sprites/items/Melee/halberd2.png");
   smallAxe = loadImage("sprites/items/Melee/hand_axe2.png");
-  longSword = loadImage("sprites/items/Melee/long_sword.1.png");
+  longSword = loadImage("sprites/items/Melee/long_sword1.png");
 
+  //Ranged weapons
+  crossbow = loadImage("sprites/items/Ranged/crossbow1.png");
+  handCrossBow = loadImage("sprites/items/Ranged/hand_crossbow.png");
+  throwingStone = loadImage("sprites/items/Ranged/stone.png");
+
+  arrow = loadImage("sprites/items/Ranged/elven_arrow.png");
 }
 
 function setup() {
@@ -390,6 +397,14 @@ function showTile(location, x, y){
     player.x = x;
     player.y = y;
   }
+  else if (location === "C"){
+    image(floor2, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
+    image(chest, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
+  }
+  else if (location === "Q"){
+    image(floor2, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
+    image(chestOpen, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
+  }
 }
 
 function floorRandomizer(){
@@ -469,39 +484,82 @@ function death(){
     } 
   }
 }
-let infront;
+
 function keyPressed(){
   playMap[player.x][player.y] = ".";
   if (key === "w" || keyCode === UP_ARROW){
-    if (playMap[player.x][player.y-1] != "#" ){
-      player.y -= 1;
+    player.direction = "up";
+    if (playMap[player.x][player.y-1] != "#"){
+      if (playMap[player.x][player.y-1] != "O"){
+        if (playMap[player.x][player.y-1] != "C"){
+          player.y -= 1;
+        }
+      }
     }
   }
   if (key === "s" || keyCode === DOWN_ARROW){
-    if (playMap[player.x][player.y+1] != "#" ){
-      player.y += 1;
+    player.direction = "down";
+    if (playMap[player.x][player.y+1] != "#"){
+      if (playMap[player.x][player.y+1] != "O"){
+        if (playMap[player.x-1][player.y] != "C"){
+          player.y += 1;
+        }
+      }
     }
   }
   if (key === "d" || keyCode === LEFT_ARROW){
-    if (playMap[player.x+1][player.y] != "#" ){
-      player.x += 1;
+    player.direction = "right";
+    if (playMap[player.x+1][player.y] != "#"){
+      if (playMap[player.x+1][player.y] != "O"){
+        if (playMap[player.x+1][player.y] != "C"){
+          player.x += 1;
+        }
+      }
     }
   }
   if (key === "a" || keyCode === RIGHT_ARROW){
-    if (playMap[player.x-1][player.y] != "#" ){
-      player.x -= 1;
+    player.direction = "left";
+    if (playMap[player.x-1][player.y] != "#"){
+      if (playMap[player.x-1][player.y] != "O"){
+        if (playMap[player.x-1][player.y] != "C"){
+          player.x -= 1;
+        }
+      }
     }
+  }
+  if (key === "e"){
+    chests();
   }
   playMap[player.x][player.y] = "P";
 }
 
-// function stairs(){
-//   if (playMap[player.x][player.y] === "<"){
-//       levelToLoad = l;
-//       l++
+function chests(){
+  if (direction = "right" && playMap[player.x+1][player.y] === "C"){
+    playMap[player.x+1][player.y] = "Q"
+    chestOpened = true;
+  }
+  if (direction = "left" && playMap[player.x-1][player.y] === "C"){
+    playMap[player.x-1][player.y] = "Q"
+    chestOpened = true;
+  }
+  if (direction = "up" && playMap[player.x][player.y-1] === "C"){
+    playMap[player.x][player.y-1] = "Q"
+    chestOpened = true;
+  }
+  if (direction = "down" && playMap[player.x][player.y+1] === "C"){
+    playMap[player.x+1][player.y+1] = "Q"
+    chestOpened = true;
+  }
+}
 
-//     }
-//   } 
+function chestMenu(){
+
+}
+function stairs(){
+  if (playMap[player.x][player.y] === "<"){
+
+    }
+  } 
 
 // class enemy{
 //   constructor(type, x, y){
