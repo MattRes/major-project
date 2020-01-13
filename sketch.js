@@ -38,6 +38,9 @@ let player = {
 };
 let inventory = [];
 
+let chestItem;
+let chestItemSprite;
+let r;
 chestOpened = false;
 let switcher = true;
 let alpha = 250;
@@ -332,20 +335,20 @@ function displayControls(){
 }
 
 function controlMenuButtons(){
-  optionBackButton = new Clickable(width/2 - 100 , height/2 + 125)
-  optionBackButton.resize(200, 70);
-  optionBackButton.color = "#b00e0e";
-  optionBackButton.textSize = 20;
-  optionBackButton.textFont = font;
-  optionBackButton.text = "Back"
-  optionBackButton.draw();
+  controlBackButton = new Clickable(width/2 - 100 , height/2 + 125)
+  controlBackButton.resize(200, 70);
+  controlBackButton.color = "#b00e0e";
+  controlBackButton.textSize = 20;
+  controlBackButton.textFont = font;
+  controlBackButton.text = "Back"
+  controlBackButton.draw();
 
-  optionBackButton.onHover = function(){
-    optionBackButton.color = "#800606"
-    optionBackButton.draw();
+  controlBackButton.onHover = function(){
+    controlBackButton.color = "#800606"
+    controlBackButton.draw();
   }
-  optionBackButton.onPress = function(){
-    state = "menu";
+  controlBackButton.onPress = function(){
+    state = "option";
     clear();
   }
 }
@@ -702,7 +705,7 @@ function keyPressed(){
       chestDropPopUp();
     }
     if (direction = "down" && playMap[player.x][player.y+1] === "C"){
-      playMap[player.x+1][player.y+1] = "Q"
+      playMap[player.x][player.y+1] = "Q"
       chestOpened = true;
       chestDropPopUp();
     }
@@ -738,9 +741,6 @@ function chestMenu(){
   }
 }
 
-let chestItem;
-let chestItemSprite;
-let r;
 
 function chestDropPopUp(){
   r = floor(random(0, chestItems.length));
@@ -812,7 +812,7 @@ class enemy{
     }
   }
   attack(){
-    if (this.x - player.x || this.y - player.y === 1){
+    if (this.x - player.x === 1 || this.y - player.y === 1){
       this.attack - player.health;
     }
   }
