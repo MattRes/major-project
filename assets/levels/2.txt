@@ -21,7 +21,7 @@ XXXXXXXXX####.........####XXXXXXXXXXXXXXX#######XXXXXXXXXXXX
 XXXXXXXX#............#XXXXXXXXXXXXXXXXX##.......####XXXXXXXX
 XXXXXXXXX#####........#XXXXXXXX########.............####XXXX
 XXXXXXXXX###......####XXXXXXX##...........####..........#XXX
-XXXXXX###............#XXXXXX#.....S.....##XXX####........#XX
+XXXXXX###...........C#XXXXXX#.....P.....##XXX####........#XX
 XXXXX#............###XXXXXXXX###########XXXX#............#XX
 XXXXXX##...........###########################......#####XXX
 XXXXXXXX####........................................#XXXXXXX

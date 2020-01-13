@@ -36,6 +36,7 @@ let player = {
   lastXp: 0,
   xp: 0
 };
+let inventory = [];
 
 chestOpened = false;
 let switcher = true;
@@ -46,12 +47,12 @@ function preload(){
   //FANCY GAME FONT
   font = loadFont("assets/Ancient Modern Tales.otf")
   
-  levelToLoad = "assets/levels/1.txt";
-  
   // LEVELS 
   level1 = "assets/levels/1.txt";
   level2 = "assets/levels/2.txt";
   level3  = "assets/levels/3.txt";
+
+  levelToLoad = level1;
   lines = loadStrings(levelToLoad);
   
   // MAP ASSETS
@@ -228,6 +229,8 @@ function updateState(){
   else if (state === "gameLoop"){
     gameLoop();
   }
+  else if (state === "controlDisplay")
+    displayControls();
 }
 function displayMenu(){
   background ("#524646");
@@ -292,6 +295,51 @@ function optionsButtons(){
   optionBackButton.textFont = font;
   optionBackButton.text = "Back"
   optionBackButton.draw();
+
+  optionBackButton.onHover = function(){
+    optionBackButton.color = "#800606"
+    optionBackButton.draw();
+  }
+  optionBackButton.onPress = function(){
+    state = "menu";
+    clear();
+  }
+  controlsMenu = new Clickable(width/2- 100, height/2);
+  controlsMenu.resize(200, 70);
+  controlsMenu.color = "#b00e0e";
+  controlsMenu.textSize = 20;
+  controlsMenu.textFont = font;
+  controlsMenu.text = "Controls";
+  controlsMenu.draw();
+
+  controlsMenu.onHover = function(){
+    controlsMenu.color = "#800606";
+    controlsMenu.draw();
+  }
+  controlsMenu.onPress = function(){
+    state = "controlDisplay";
+    clear();
+  }
+}
+function displayControls(){
+  background(43,75,210);
+  fill(0);
+  textSize(30)
+  text("W,A,S,D - Movement", width/2, height/3)
+  text("E - Interact Key", width/2, height/3 + 50)
+  text("Space Bar - Attack", width/2, height/3 + 100)
+  controlMenuButtons();
+}
+
+function controlMenuButtons(){
+  optionBackButton = new Clickable(width/2 - 100 , height/2 + 125)
+  optionBackButton.resize(200, 70);
+  optionBackButton.color = "#b00e0e";
+  optionBackButton.textSize = 20;
+  optionBackButton.textFont = font;
+  optionBackButton.text = "Back"
+  optionBackButton.draw();
+
   optionBackButton.onHover = function(){
     optionBackButton.color = "#800606"
     optionBackButton.draw();
@@ -592,7 +640,9 @@ function keyPressed(){
     if (playMap[player.x][player.y-1] != "#"){
       if (playMap[player.x][player.y-1] != "O"){
         if (playMap[player.x][player.y-1] != "C"){
-          player.y -= 1;
+          if (playMap[player.x][player.y-1] != ">"){
+            player.y -= 1;
+          }
         }
       }
     }
@@ -601,8 +651,10 @@ function keyPressed(){
     player.direction = "down";
     if (playMap[player.x][player.y+1] != "#"){
       if (playMap[player.x][player.y+1] != "O"){
-        if (playMap[player.x-1][player.y] != "C"){
-          player.y += 1;
+        if (playMap[player.x][player.y+1] != "C"){
+          if (playMap[player.x][player.y+1] != ">"){
+            player.y += 1;
+          }
         }
       }
     }
@@ -612,7 +664,9 @@ function keyPressed(){
     if (playMap[player.x+1][player.y] != "#"){
       if (playMap[player.x+1][player.y] != "O"){
         if (playMap[player.x+1][player.y] != "C"){
-          player.x += 1;
+          if (playMap[player.x+1][player.y] != ">"){
+            player.x += 1;
+          }
         }
       }
     }
@@ -622,12 +676,15 @@ function keyPressed(){
     if (playMap[player.x-1][player.y] != "#"){
       if (playMap[player.x-1][player.y] != "O"){
         if (playMap[player.x-1][player.y] != "C"){
-          player.x -= 1;
+          if (playMap[player.x-1][player.y] != ">"){
+            player.x -= 1;
+          }
         }
       }
     }
   }
   if (key === "e"){
+    //Chest interaction 
     if (direction = "right" && playMap[player.x+1][player.y] === "C"){
       playMap[player.x+1][player.y] = "Q"
       chestOpened = true;
@@ -649,7 +706,18 @@ function keyPressed(){
       chestOpened = true;
       chestDropPopUp();
     }
-    console.log("RAN")
+    //Stair interaction 
+    if (direction = "right" && playMap[player.x+1][player.y] === ">"){
+    }
+    if (direction = "left" && playMap[player.x-1][player.y] === ">"){
+      stairs();
+    }
+    if (direction = "up" && playMap[player.x][player.y-1] === ">"){
+
+    }
+    if (direction = "down" && playMap[player.x][player.y+1] === ">"){
+
+    }
     }
   playMap[player.x][player.y] = "P";
 };
@@ -694,6 +762,7 @@ function chestDropPopUpButtons(){
       chestEquip.draw();
     }
     chestEquip.onPress = function(){
+      //chestItem[r].push 
       player.attack = player.baseAttack
       player.attack = player.attack + chestItems[r].attack;
       chestOpened = false;
@@ -717,17 +786,34 @@ function chestDropPopUpButtons(){
 };
 
 function stairs(){
-  if (playMap[player.x][player.y] === "<"){
-
-    }
+  levelToLoad = level3
   } 
 
   
-// class enemy{
-//   constructor(type, x, y){
-//     this.type = type;
-//     this.x = x;
-//     this.y = y; 
+class enemy{
+  constructor(type, x, y, health, attack, range){
+    this.type = type;
+    this.x = x;
+    this.y = y; 
+    this.health = health;
+    this.attack = attack;
+    this.range = range;
+  }
+  draw(){
+    image(type, x, y, tilesWidth, tilesHeight)
+  }
 
-//   }
-// }
+  move(){
+    if (this.x - player.x < 10){
+      this.x --;
+    }
+    if (this.y - player.y < 10){
+      this.y --; 
+    }
+  }
+  attack(){
+    if (this.x - player.x || this.y - player.y === 1){
+      this.attack - player.health;
+    }
+  }
+}
