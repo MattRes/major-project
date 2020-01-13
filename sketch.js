@@ -164,14 +164,14 @@ function preload(){
   poisonPotion1 = {
     name: "Magic Potion",
     sprite: 0, 
-    attackSpeed: "N/A",
-    attack: "N/A"
+    attackSpeed: 0,
+    attack: 0
   };
   healthPotion1 = {
     name: "Health Potion",
     sprite: 0,
-    attackSpeed: "N/A",
-    attack: "N/A"
+    attackSpeed: 0,
+    attack: 0
   };
 function setup() {
   axe1.sprite = battleAxe;
@@ -607,7 +607,7 @@ function keyPressed(){
       }
     }
   }
-  if (key === "d" || keyCode === LEFT_ARROW){
+  if (key === "d" || keyCode === RIGHT_ARROW){
     player.direction = "right";
     if (playMap[player.x+1][player.y] != "#"){
       if (playMap[player.x+1][player.y] != "O"){
@@ -617,7 +617,7 @@ function keyPressed(){
       }
     }
   }
-  if (key === "a" || keyCode === RIGHT_ARROW){
+  if (key === "a" || keyCode === LEFT_ARROW){
     player.direction = "left";
     if (playMap[player.x-1][player.y] != "#"){
       if (playMap[player.x-1][player.y] != "O"){
@@ -649,9 +649,10 @@ function keyPressed(){
       chestOpened = true;
       chestDropPopUp();
     }
+    console.log("RAN")
     }
   playMap[player.x][player.y] = "P";
-}
+};
 
 function chestMenu(){
   if (chestOpened){
@@ -721,6 +722,7 @@ function stairs(){
     }
   } 
 
+  
 // class enemy{
 //   constructor(type, x, y){
 //     this.type = type;
