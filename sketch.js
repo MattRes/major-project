@@ -25,7 +25,8 @@ let player = {
   sprite: 0, 
   maxHealth:60,
   maxLevel: 15,
-  health:  60, 
+  health:  60,
+  baseAttack:1, 
   attack: 1, 
   defense: 0,
   x:0, 
@@ -44,15 +45,15 @@ let floorNumber;
 function preload(){
   //FANCY GAME FONT
   font = loadFont("assets/Ancient Modern Tales.otf")
-
+  
   levelToLoad = "assets/levels/1.txt";
-
+  
   // LEVELS 
   level1 = "assets/levels/1.txt";
   level2 = "assets/levels/2.txt";
   level3  = "assets/levels/3.txt";
   lines = loadStrings(levelToLoad);
-
+  
   // MAP ASSETS
   wall = loadImage ("sprites/mapassets/brick_dark0.png");
   blackEmpty = loadImage("sprites/mapassets/black_empty.png")
@@ -68,20 +69,20 @@ function preload(){
   // PLAYER SPRITES
   mage = loadImage("sprites/player/mage.png");
   wizardBg = loadImage("sprites/wizardbg.png");
-
+  
   warrior = loadImage("sprites/player/warrior.png");
   warriorBg = loadImage("sprites/warriorbg.jpg");
-
+  
   ranger = loadImage("sprites/player/ranger.png");
   rangerBg = loadImage("sprites/rangerbg.jfif");
-
+  
   orc = loadImage("sprites/enemies/orc_warrior.png");
   turtle = loadImage("sprites/enemies/turtle.png");
-
+  
   // ITEMS
   healthPotion = loadImage("sprites/items/Potions/health_potion.png");
   poisonPotion = loadImage("sprites/items/Potions/posion_potion.png");
-
+  
   //MELEE WEAPONS 
   battleAxe = loadImage("sprites/items/Melee/battle_axe1.png");
   executioner = loadImage("sprites/items/Melee/executioner_axe1.png");
@@ -90,29 +91,116 @@ function preload(){
   halberd = loadImage("sprites/items/Melee/halberd2.png");
   smallAxe = loadImage("sprites/items/Melee/hand_axe2.png");
   longSword = loadImage("sprites/items/Melee/long_sword1.png");
-
+  
   //Ranged weapons
   crossbow = loadImage("sprites/items/Ranged/crossbow1.png");
   handCrossBow = loadImage("sprites/items/Ranged/hand_crossbow.png");
   throwingStone = loadImage("sprites/items/Ranged/stone.png");
-
+  
   arrow = loadImage("sprites/items/Ranged/elven_arrow.png");
 }
+// Weapon Stats
 
+  axe1 = {
+    name: "Battle Axe",
+    sprite: 0,
+    attackSpeed: 1,
+    attack:1,
+  };
+  excutioner = {
+    name: "Executioner",
+    sprite: 0,
+    attackSpeed: 1,
+    attack:1,
+  };
+  falchion1 = {
+    name: "Falchion",
+    sprite: 0,
+    attackSpeed: 1,
+    attack:1,
+  };
+  club1 = {
+    name: "Club",
+    sprite: 0,
+    attackSpeed: 1,
+    attack:1,
+  };
+  halberd1 = {
+    name: "Halberd",
+    sprite: 0,
+    attackSpeed: 1,
+    attack:1,
+  };
+  axe2 = {
+    name: "Hatchet",
+    sprite: 0,
+    attackSpeed: 1,
+    attack:1,
+  };
+  longSword1 = {
+    name: "Long Sword",
+    sprite: 0,
+    attackSpeed: 1,
+    attack:1,
+  };
+  crossbow1 = {
+    name: "Crossbow",
+    sprite: 0,
+    attackSpeed: 1,
+    attack:1,
+  };
+  handCrossBow1 = {
+    name: "Hand Crossbow",
+    sprite: 0,
+    attackSpeed: 1,
+    attack:1,
+  };
+  stone = {
+    name: "Stone",
+    sprite: 0,
+    attackSpeed: 1,
+    attack:1,
+  };
+  poisonPotion1 = {
+    name: "Magic Potion",
+    sprite: 0, 
+    attackSpeed: "N/A",
+    attack: "N/A"
+  };
+  healthPotion1 = {
+    name: "Health Potion",
+    sprite: 0,
+    attackSpeed: "N/A",
+    attack: "N/A"
+  };
 function setup() {
+  axe1.sprite = battleAxe;
+  excutioner.sprite = executioner;
+  falchion1.sprite = falchion;
+  club1.sprite = club;
+  halberd1.sprite = halberd;
+  axe2.sprite = smallAxe;
+  longSword1.sprite = longSword;
+  crossbow1.sprite = crossbow;
+  handCrossBow1.sprite = handCrossBow;
+  stone.sprite = throwingStone;
+  healthPotion1.sprite = healthPotion;
+  poisonPotion1.sprite = poisonPotion;
+
   // 2:1 ratio
   createCanvas(1500, 750 );
   state = "menu"
   textAlign(CENTER, CENTER);
-
+  
   tilesHigh = lines.length;
   tilesWide = lines[0].length;
-
+  
   tileWidth = width / tilesWide ;
   tileHeight = height / tilesHigh;
-
+  
   playMap = createEmpty2dArray(tilesWide, tilesHigh);
-
+  
+  chestItems = [axe1, excutioner, falchion1, club1, halberd1, axe2, longSword1, crossbow1, handCrossBow1, stone, healthPotion1, poisonPotion1];
   //put values into 2d array of characters
   for (let y = 0; y < tilesHigh; y++) {
     for (let x = 0; x < tilesWide; x++) {
@@ -303,6 +391,7 @@ function mageStats(){
   player.maxHealth = 40;
   player.health = 40; 
   player.attack = 3;
+  player.baseAttack = 3;
   player.defense = 0;
 }
 
@@ -313,7 +402,8 @@ function warriorStats(){
   text("Defense:" + player.defense, width/2, height/2 + height/10);
   player.maxHealth = 65;
   player.health = 65; 
-  player.attack = 1.5;
+  player.attack = 2;
+  player.baseAttack = 2;
   player.defense = 3;
 }
 
@@ -325,6 +415,7 @@ function rangerStats(){
   player.maxHealth = 55;
   player.health = 55; 
   player.attack = 1.5;
+  player.baseAttack = 1.5;
   player.defense = 1;
 }
 
@@ -333,10 +424,19 @@ function gameLoop(){
   updateHealthBar();
   gameLoopButtons();
   playerLevelUp();
+  chestMenu();
 }
 
 function gameLoopButtons(){
-
+  rectMode(CORNER);
+  fill(255);
+  textSize(15);
+  text("Magic", width - 75, height - 120, 50, 50);
+  rect(width - 75, height - 75, 50, 50);
+  text("Health", width - 135, height - 120, 50, 50);
+  rect(width - 135, height - 75, 50, 50);
+  text("Weapon", width - 195, height - 120, 50, 50);
+  rect(width - 195, height - 75, 50, 50);
 }
 
 function playerLevelUp(){
@@ -528,33 +628,93 @@ function keyPressed(){
     }
   }
   if (key === "e"){
-    chests();
-  }
+    if (direction = "right" && playMap[player.x+1][player.y] === "C"){
+      playMap[player.x+1][player.y] = "Q"
+      chestOpened = true;
+      chestDropPopUp();
+    }
+    if (direction = "left" && playMap[player.x-1][player.y] === "C"){
+      playMap[player.x-1][player.y] = "Q"
+      chestOpened = true;
+      chestDropPopUp();
+    
+    }
+    if (direction = "up" && playMap[player.x][player.y-1] === "C"){
+      playMap[player.x][player.y-1] = "Q"
+      chestOpened = true;
+      chestDropPopUp();
+    }
+    if (direction = "down" && playMap[player.x][player.y+1] === "C"){
+      playMap[player.x+1][player.y+1] = "Q"
+      chestOpened = true;
+      chestDropPopUp();
+    }
+    }
   playMap[player.x][player.y] = "P";
 }
 
-function chests(){
-  if (direction = "right" && playMap[player.x+1][player.y] === "C"){
-    playMap[player.x+1][player.y] = "Q"
-    chestOpened = true;
-  }
-  if (direction = "left" && playMap[player.x-1][player.y] === "C"){
-    playMap[player.x-1][player.y] = "Q"
-    chestOpened = true;
-  }
-  if (direction = "up" && playMap[player.x][player.y-1] === "C"){
-    playMap[player.x][player.y-1] = "Q"
-    chestOpened = true;
-  }
-  if (direction = "down" && playMap[player.x][player.y+1] === "C"){
-    playMap[player.x+1][player.y+1] = "Q"
-    chestOpened = true;
-  }
-}
-
 function chestMenu(){
-
+  if (chestOpened){
+    rectMode(CENTER);
+    fill(0,0,255)
+    rect(width/2,height/2, 300, 200);
+    fill(255);
+    rect(width/2,height/2, 280, 180);
+    fill(0);
+    text("Congratulations! You found a " + chestItem, width/2, height/3 + 50)
+    image(chestItemSprite, width/2 - 50, height/3 + 85, 100, 100);
+    text("Damage: " + chestItems[r].attack, width/2 + 90, height/2 - 40);    
+    text("Speed: " + chestItems[r].attackSpeed, width/2 + 90, height/2 - 20);
+    chestDropPopUpButtons();
+  }
 }
+
+let chestItem;
+let chestItemSprite;
+let r;
+
+function chestDropPopUp(){
+  r = floor(random(0, chestItems.length));
+  chestItem = chestItems[r].name;
+  chestItemSprite = chestItems[r].sprite;
+}
+function chestDropPopUpButtons(){
+  if (chestOpened){
+    rectMode(CORNER);
+    chestEquip = new Clickable(width/2 + 80, height/2 + 10)
+    chestEquip.resize(40, 30);
+    chestEquip.color = "#b00e0e";
+    chestEquip.textSize = 15;
+    chestEquip.textFont = font;
+    chestEquip.text = "Equip"
+    chestEquip.draw();
+    chestEquip.onHover = function(){
+      chestEquip.color = "#800606"
+      chestEquip.draw();
+    }
+    chestEquip.onPress = function(){
+      player.attack = player.baseAttack
+      player.attack = player.attack + chestItems[r].attack;
+      chestOpened = false;
+    }
+
+    chestCancel = new Clickable(width/2 + 80, height/2 + 50)
+    chestCancel.resize(40, 30);
+    chestCancel.color = "#b00e0e";
+    chestCancel.textSize = 15;
+    chestCancel.textFont = font;
+    chestCancel.text = "Cancel"
+    chestCancel.draw();
+    chestCancel.onHover = function(){
+      chestCancel.color = "#800606"
+      chestCancel.draw();
+    }
+    chestCancel.onPress = function(){
+      chestOpened = false;
+    }
+}
+};
+
 function stairs(){
   if (playMap[player.x][player.y] === "<"){
 
