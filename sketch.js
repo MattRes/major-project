@@ -430,7 +430,7 @@ function displayPlayerSelect(){
   }
   if (playerSelect === 2){
     textSize(30);
-    text("Ranger", width/2, height/2 - height/44)
+    text("Ranger", width/2, height/2);
     image(rangerBg, width/2 - 125, height/2.5 - 200, 250, 250);
     image(ranger, width/2 - 37.5, height/2.5 - 37.5 , 75, 75);
     player.sprite = ranger;
