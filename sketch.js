@@ -109,25 +109,25 @@ function preload(){
     name: "Battle Axe",
     sprite: 0,
     attackSpeed: 1,
-    attack:1,
+    attack:2,
   };
   excutioner = {
     name: "Executioner",
     sprite: 0,
     attackSpeed: 1,
-    attack:1,
+    attack:3,
   };
   falchion1 = {
     name: "Falchion",
     sprite: 0,
     attackSpeed: 1,
-    attack:1,
+    attack:2,
   };
   club1 = {
     name: "Club",
     sprite: 0,
     attackSpeed: 1,
-    attack:1,
+    attack:1.5,
   };
   halberd1 = {
     name: "Halberd",
@@ -138,32 +138,32 @@ function preload(){
   axe2 = {
     name: "Hatchet",
     sprite: 0,
-    attackSpeed: 1,
-    attack:1,
+    attackSpeed: 2,
+    attack:2,
   };
   longSword1 = {
     name: "Long Sword",
     sprite: 0,
-    attackSpeed: 1,
-    attack:1,
+    attackSpeed: 1.5,
+    attack:3,
   };
   crossbow1 = {
     name: "Crossbow",
     sprite: 0,
     attackSpeed: 1,
-    attack:1,
+    attack:2,
   };
   handCrossBow1 = {
     name: "Hand Crossbow",
     sprite: 0,
-    attackSpeed: 1,
-    attack:1,
+    attackSpeed: 2,
+    attack:1.5,
   };
   stone = {
     name: "Stone",
     sprite: 0,
-    attackSpeed: 1,
-    attack:1,
+    attackSpeed: 3,
+    attack:0.5,
   };
   poisonPotion1 = {
     name: "Magic Potion",
@@ -205,7 +205,7 @@ function setup() {
   
   playMap = createEmpty2dArray(tilesWide, tilesHigh);
   
-  chestItems = [axe1, excutioner, falchion1, club1, halberd1, axe2, longSword1, crossbow1, handCrossBow1, stone, healthPotion1, poisonPotion1];
+  chestItems = [axe1, excutioner, falchion1, club1, halberd1, axe2, longSword1, crossbow1, handCrossBow1, stone]; //healthPotion1, poisonPotion1
   //put values into 2d array of characters
   for (let y = 0; y < tilesHigh; y++) {
     for (let x = 0; x < tilesWide; x++) {
