@@ -13,12 +13,11 @@
  let tilesWidth, tilesHeight;
  let levelToLoad;
  let lines;
-
+ let playerHasItem;
  let pulse;
 
 let floorTile;
 let playerSelect = 0;
-
 let state; 
 
 let player = {
@@ -45,19 +44,20 @@ chestOpened = false;
 let switcher = true;
 let alpha = 250;
 let floorNumber;
+let lv1, lv2, lv3
 
 function preload(){
   //FANCY GAME FONT
   font = loadFont("assets/Ancient Modern Tales.otf")
   
   // LEVELS 
-  level1 = "assets/levels/1.txt";
-  level2 = "assets/levels/2.txt";
-  level3  = "assets/levels/3.txt";
+  lv1 = "assets/levels/1.txt";
+  lv2 = "assets/levels/2.txt";
+  lv3  = "assets/levels/3.txt";
 
-  levelToLoad = level1;
+  levelToLoad = lv1;
   lines = loadStrings(levelToLoad);
-  
+
   // MAP ASSETS
   wall = loadImage ("sprites/mapassets/brick_dark0.png");
   blackEmpty = loadImage("sprites/mapassets/black_empty.png")
@@ -198,6 +198,7 @@ function setup() {
   
   tilesHigh = lines.length;
   tilesWide = lines[0].length;
+
   
   tileWidth = width / tilesWide ;
   tileHeight = height / tilesHigh;
@@ -212,10 +213,10 @@ function setup() {
       playMap[x][y] = tileType;
     }
   }
+  playerHasItem = false; 
 }
 
 function draw() {
-  background(0);
   updateState();
 }
 
@@ -229,9 +230,16 @@ function updateState(){
   else if (state === "gameChoice"){
     displayGameChoice();
   }
-  else if (state === "gameLoop"){
-    gameLoop();
+  else if (state === "level1"){
+    level1();
   }
+  else if (state === "level2"){
+    level2();
+  }
+  else if (state === "level3"){
+    level3();
+  }
+
   else if (state === "controlDisplay")
     displayControls();
 }
@@ -395,7 +403,7 @@ function displayGameChoiceButtons(){
   }
   confirmButton.onPress = function(){
     console.log("press")
-    state = "gameLoop";
+    state = "level1";
     clear();
   }
 }
@@ -470,15 +478,22 @@ function rangerStats(){
   player.defense = 1;
 }
 
-function gameLoop(){
-  displayMap();
+function level1(){
+  displayLevel();
   updateHealthBar();
-  gameLoopButtons();
+  levelButtons();
+  playerLevelUp();
+  chestMenu();
+}
+function level2(){
+  displayLevel();
+  updateHealthBar();
+  levelButtons();
   playerLevelUp();
   chestMenu();
 }
 
-function gameLoopButtons(){
+function levelButtons(){
   rectMode(CORNER);
   fill(255);
   textSize(15);
@@ -488,6 +503,10 @@ function gameLoopButtons(){
   rect(width - 135, height - 75, 50, 50);
   text("Weapon", width - 195, height - 120, 50, 50);
   rect(width - 195, height - 75, 50, 50);
+  if (playerHasItem){
+    image(chestItemSprite, width - 195, height - 75, 50, 50);
+  }
+    
 }
 
 function playerLevelUp(){
@@ -511,16 +530,10 @@ function displayLevel() {
   }
 } 
 
-function displayMap(){
-  displayLevel();
-}
-
-
 function showTile(location, x, y){
   if (location === "#"){
     // Converts # into walls 
     image(wall, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
-    movable = true;
   }
   else if (location === "."){
     // Converts . into floors
@@ -640,51 +653,31 @@ function keyPressed(){
   playMap[player.x][player.y] = ".";
   if (key === "w" || keyCode === UP_ARROW){
     player.direction = "up";
-    if (playMap[player.x][player.y-1] != "#"){
-      if (playMap[player.x][player.y-1] != "O"){
-        if (playMap[player.x][player.y-1] != "C"){
-          if (playMap[player.x][player.y-1] != ">"){
-            player.y -= 1;
-          }
-        }
-      }
+    if (playMap[player.x][player.y-1] === "."){
+      player.y -= 1;
     }
+    else;
   }
   if (key === "s" || keyCode === DOWN_ARROW){
     player.direction = "down";
-    if (playMap[player.x][player.y+1] != "#"){
-      if (playMap[player.x][player.y+1] != "O"){
-        if (playMap[player.x][player.y+1] != "C"){
-          if (playMap[player.x][player.y+1] != ">"){
-            player.y += 1;
-          }
-        }
-      }
+    if (playMap[player.x][player.y+1] === "."){
+      player.y += 1;
     }
+    else;
   }
   if (key === "d" || keyCode === RIGHT_ARROW){
     player.direction = "right";
-    if (playMap[player.x+1][player.y] != "#"){
-      if (playMap[player.x+1][player.y] != "O"){
-        if (playMap[player.x+1][player.y] != "C"){
-          if (playMap[player.x+1][player.y] != ">"){
-            player.x += 1;
-          }
-        }
-      }
+    if (playMap[player.x+1][player.y] === "."){
+      player.x += 1;
     }
+    else;
   }
   if (key === "a" || keyCode === LEFT_ARROW){
     player.direction = "left";
-    if (playMap[player.x-1][player.y] != "#"){
-      if (playMap[player.x-1][player.y] != "O"){
-        if (playMap[player.x-1][player.y] != "C"){
-          if (playMap[player.x-1][player.y] != ">"){
-            player.x -= 1;
-          }
-        }
-      }
+    if (playMap[player.x-1][player.y] === "."){
+      player.x -= 1;
     }
+    else;
   }
   if (key === "e"){
     //Chest interaction 
@@ -697,7 +690,6 @@ function keyPressed(){
       playMap[player.x-1][player.y] = "Q"
       chestOpened = true;
       chestDropPopUp();
-    
     }
     if (direction = "up" && playMap[player.x][player.y-1] === "C"){
       playMap[player.x][player.y-1] = "Q"
@@ -709,19 +701,31 @@ function keyPressed(){
       chestOpened = true;
       chestDropPopUp();
     }
-    //Stair interaction 
+    //Stair interaction
     if (direction = "right" && playMap[player.x+1][player.y] === ">"){
+      if (state === "level1"){
+        levelToLoad = lv2;
+        lines = loadStrings(levelToLoad);
+        state = "level2";
+      }
     }
     if (direction = "left" && playMap[player.x-1][player.y] === ">"){
-      stairs();
+      if (state === "level1"){
+        state = "level2";
+      }
     }
     if (direction = "up" && playMap[player.x][player.y-1] === ">"){
-
+      if (state === "level1"){
+        state = "level2";
+      }
     }
+    
     if (direction = "down" && playMap[player.x][player.y+1] === ">"){
-
+      if (state === "level1"){
+        state = "level2";
+      }
     }
-    }
+  }
   playMap[player.x][player.y] = "P";
 };
 
@@ -741,11 +745,11 @@ function chestMenu(){
   }
 }
 
-
 function chestDropPopUp(){
   r = floor(random(0, chestItems.length));
   chestItem = chestItems[r].name;
   chestItemSprite = chestItems[r].sprite;
+
 }
 function chestDropPopUpButtons(){
   if (chestOpened){
@@ -766,6 +770,7 @@ function chestDropPopUpButtons(){
       player.attack = player.baseAttack
       player.attack = player.attack + chestItems[r].attack;
       chestOpened = false;
+      playerHasItem = true;
     }
 
     chestCancel = new Clickable(width/2 + 80, height/2 + 50)
@@ -788,7 +793,14 @@ function chestDropPopUpButtons(){
 function stairs(){
   levelToLoad = level3
   } 
-
+// function checkLevelChange(){
+//   if (playMap[player.x][player.y] === ">"){
+//     leveltoload = level2
+//     lines = loadStrings(levelToLoad);
+//     displayLevel();
+//     console.log("ran")
+//   }
+// }
   
 class enemy{
   constructor(type, x, y, health, attack, range){
