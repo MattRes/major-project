@@ -868,11 +868,13 @@ function orcMovement(){
   console.log("orc")
   playMap[orc.x][orc.y] = ".";
   console.log(orc.x - player.x);
-  if (orc.x - player.x < 10 ){
-    console.log("moving")
-    orc.x -= 1;
-    if (orc.x - player.x > 10){
-      orc.x += 1;
+  if (playMap[orc.x - 1][orc.y] === "."){
+    if (orc.x - player.x < 10 ){
+      console.log("moving")
+      orc.x -= 1;
+      if (orc.x - player.x > 10){
+        orc.x += 1;
+      }
     }
   }
   playMap[orc.x][orc.y] = "O";
