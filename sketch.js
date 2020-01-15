@@ -7,14 +7,14 @@
 
 // Tile set taken from https://opengameart.org/content/dungeon-crawl-32x32-tiles
 // Font style taken from https://www.fontspace.com/chequered-ink/ancient-modern-tales
- let playMap;
- let tiles;
- let tilesHigh, tilesWide;
- let tilesWidth, tilesHeight;
- let levelToLoad;
- let lines;
- let playerHasItem;
- let pulse;
+let playMap;
+let tiles;
+let tilesHigh, tilesWide;
+let tilesWidth, tilesHeight;
+let levelToLoad;
+let lines;
+let playerHasItem;
+let pulse;
 
 let floorTile;
 let playerSelect = 0;
@@ -35,7 +35,17 @@ let player = {
   lastXp: 0,
   xp: 0
 };
+
+let orc = {
+  sprite: 0,
+  x:0,
+  y:0, 
+  attack:3, 
+  health: 0
+};
 let inventory = [];
+
+let tileType;
 
 let chestItem;
 let chestItemSprite;
@@ -44,7 +54,7 @@ chestOpened = false;
 let switcher = true;
 let alpha = 250;
 let floorNumber;
-let lv1, lv2, lv3
+let lv1, lv2, lv3;
 
 function preload(){
   //FANCY GAME FONT
@@ -68,7 +78,8 @@ function preload(){
   gFloor2 = loadImage("sprites/mapassets/lair3.png");
   enter = loadImage("sprites/mapassets/dngn_enter.png");
   chest = loadImage("sprites/mapassets/chest.png");
-  chestOpen = loadImage("sprites/mapassets/chest_open.png")
+  chestOpen = loadImage("sprites/mapassets/chest_open.png");
+  trap = loadImage("sprites/mapassets/trap.png");
 
   // PLAYER SPRITES
   mage = loadImage("sprites/player/mage.png");
@@ -80,7 +91,7 @@ function preload(){
   ranger = loadImage("sprites/player/ranger.png");
   rangerBg = loadImage("sprites/rangerbg.jfif");
   
-  orc = loadImage("sprites/enemies/orc_warrior.png");
+  orcSprite = loadImage("sprites/enemies/orc_warrior.png");
   turtle = loadImage("sprites/enemies/turtle.png");
   
   // ITEMS
@@ -191,6 +202,8 @@ function setup() {
   healthPotion1.sprite = healthPotion;
   poisonPotion1.sprite = poisonPotion;
 
+  orc.sprite = orcSprite;
+
   // 2:1 ratio
   createCanvas(1500, 750 );
   state = "menu"
@@ -198,7 +211,7 @@ function setup() {
   
   tilesHigh = lines.length;
   tilesWide = lines[0].length;
-
+  
   
   tileWidth = width / tilesWide ;
   tileHeight = height / tilesHigh;
@@ -209,11 +222,15 @@ function setup() {
   //put values into 2d array of characters
   for (let y = 0; y < tilesHigh; y++) {
     for (let x = 0; x < tilesWide; x++) {
-      let tileType = lines[y][x];
+      tileType = lines[y][x];
       playMap[x][y] = tileType;
+      console.log(tileType);
     }
-  }
-  playerHasItem = false; 
+ }
+  
+  playerHasItem = false;
+  playerHasHealthPotion = true;
+  playerHealthPotions = 5; 
 }
 
 function draw() {
@@ -339,6 +356,7 @@ function displayControls(){
   text("W,A,S,D - Movement", width/2, height/3)
   text("E - Interact Key", width/2, height/3 + 50)
   text("Space Bar - Attack", width/2, height/3 + 100)
+  text("H or Click on potions - Consume Potion", width/2, height/3 + 150)
   controlMenuButtons();
 }
 
@@ -477,7 +495,6 @@ function rangerStats(){
   player.baseAttack = 1.5;
   player.defense = 1;
 }
-
 function level1(){
   displayLevel();
   updateHealthBar();
@@ -506,7 +523,31 @@ function levelButtons(){
   if (playerHasItem){
     image(chestItemSprite, width - 195, height - 75, 50, 50);
   }
-    
+  if (playerHasHealthPotion){
+    fill(255,0,0);
+    textSize(20);
+    healthButton = new Clickable(width - 135, height - 75);
+    healthButton.resize(52,52);
+    healthButton.cornerRadius = 0;
+    healthButton.color = ("#ffffff");
+    healthButton.textSize = 20;
+    healthButton.textFont = font;
+    healthButton.text = "";
+    healthButton.draw();
+    healthButton.onPress = function(){
+      if (playerHealthPotions > 0){
+        player.health +=20;
+        if (player.health > player.maxHealth){
+          player.health = player.maxHealth;
+        }
+        playerHealthPotions --;
+      }
+      else;
+    }
+  
+    image(healthPotion1.sprite, width - 135, height - 75, 50, 50);
+    text(playerHealthPotions, width - 115, height - 60, 50, 50);
+  }   
 }
 
 function playerLevelUp(){
@@ -551,8 +592,9 @@ function showTile(location, x, y){
   }
   else if (location === "O"){
     image(floor2, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
-    image(orc, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
-
+    image(orcSprite, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
+    orc.x = x;
+    orc.y = y;
   }
   else if (location === "P"){
     // Converts S into spawn points
@@ -568,6 +610,10 @@ function showTile(location, x, y){
   else if (location === "Q"){
     image(floor2, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
     image(chestOpen, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
+  }
+  else if (location === "T"){
+    image(floor2, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
+    image(trap, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
   }
 }
 
@@ -585,10 +631,10 @@ function floorRandomizer(){
   }
 }
   
-
+let randomGrid;
 function createEmpty2dArray(cols, rows) {
   //Creates a empty 2d array
-  let randomGrid = [];
+  randomGrid = [];
   for (let x = 0; x < cols; x++) {
     randomGrid.push([]);
     for (let y = 0; y < rows; y++) {
@@ -653,29 +699,52 @@ function keyPressed(){
   playMap[player.x][player.y] = ".";
   if (key === "w" || keyCode === UP_ARROW){
     player.direction = "up";
-    if (playMap[player.x][player.y-1] === "."){
+    if (playMap[player.x][player.y-1] === "."|| playMap[player.x][player.y-1] === "T"){
+      if (playMap[player.x][player.y-1] === "T"){
+        player.health -= 10;
+      }
       player.y -= 1;
     }
-    else;
+    else;;
   }
   if (key === "s" || keyCode === DOWN_ARROW){
     player.direction = "down";
-    if (playMap[player.x][player.y+1] === "."){
+    if (playMap[player.x][player.y+1] === "."|| playMap[player.x][player.y+1] === "T"){
+      if (playMap[player.x][player.y+1] === "T"){
+        onTrap = true;
+        player.health -= 10;
+      }
       player.y += 1;
     }
     else;
   }
   if (key === "d" || keyCode === RIGHT_ARROW){
     player.direction = "right";
-    if (playMap[player.x+1][player.y] === "."){
+    if (playMap[player.x+1][player.y] === "."|| playMap[player.x+1][player.y] === "T"){
+      if (playMap[player.x+1][player.y] === "T"){
+        player.health -= 10;
+      }
       player.x += 1;
     }
     else;
   }
   if (key === "a" || keyCode === LEFT_ARROW){
     player.direction = "left";
-    if (playMap[player.x-1][player.y] === "."){
+    if (playMap[player.x-1][player.y] === "." || playMap[player.x-1][player.y] === "T"){
+      if (playMap[player.x-1][player.y] === "T"){
+        player.health -= 10;
+      }
       player.x -= 1;
+    }
+    else;
+  }
+  if (key === "h"){
+    if (playerHealthPotions > 0){
+      player.health +=20;
+      if (player.health > player.maxHealth){
+        player.health = player.maxHealth;
+      }
+      playerHealthPotions --;
     }
     else;
   }
@@ -703,10 +772,9 @@ function keyPressed(){
     }
     //Stair interaction
     if (direction = "right" && playMap[player.x+1][player.y] === ">"){
+      clear();
       if (state === "level1"){
-        levelToLoad = lv2;
-        lines = loadStrings(levelToLoad);
-        state = "level2";
+
       }
     }
     if (direction = "left" && playMap[player.x-1][player.y] === ">"){
@@ -727,6 +795,7 @@ function keyPressed(){
     }
   }
   playMap[player.x][player.y] = "P";
+  orcMovement();
 };
 
 function chestMenu(){
@@ -766,11 +835,12 @@ function chestDropPopUpButtons(){
       chestEquip.draw();
     }
     chestEquip.onPress = function(){
-      //chestItem[r].push 
-      player.attack = player.baseAttack
+      inventory.push(chestItem);
+      player.attack = player.baseAttack;
       player.attack = player.attack + chestItems[r].attack;
       chestOpened = false;
       playerHasItem = true;
+      console.log(chestItem[r]);
     }
 
     chestCancel = new Clickable(width/2 + 80, height/2 + 50)
@@ -793,39 +863,17 @@ function chestDropPopUpButtons(){
 function stairs(){
   levelToLoad = level3
   } 
-// function checkLevelChange(){
-//   if (playMap[player.x][player.y] === ">"){
-//     leveltoload = level2
-//     lines = loadStrings(levelToLoad);
-//     displayLevel();
-//     console.log("ran")
-//   }
-// }
-  
-class enemy{
-  constructor(type, x, y, health, attack, range){
-    this.type = type;
-    this.x = x;
-    this.y = y; 
-    this.health = health;
-    this.attack = attack;
-    this.range = range;
-  }
-  draw(){
-    image(type, x, y, tilesWidth, tilesHeight)
-  }
 
-  move(){
-    if (this.x - player.x < 10){
-      this.x --;
-    }
-    if (this.y - player.y < 10){
-      this.y --; 
-    }
-  }
-  attack(){
-    if (this.x - player.x === 1 || this.y - player.y === 1){
-      this.attack - player.health;
+function orcMovement(){
+  console.log("orc")
+  playMap[orc.x][orc.y] = ".";
+  console.log(orc.x - player.x);
+  if (orc.x - player.x < 10 ){
+    console.log("moving")
+    orc.x -= 1;
+    if (orc.x - player.x > 10){
+      orc.x += 1;
     }
   }
+  playMap[orc.x][orc.y] = "O";
 }
