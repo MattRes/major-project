@@ -550,12 +550,15 @@ function levelButtons(){
 function playerLevelUp(){
   //Levels the player up incresing Health
   for (let i = 0; i < player.maxLevel; i++)
-    if (player.xp >= player.lastXp + 500){
-      player.health = player.health * 1.1;
-      player.maxHealth = player.maxHealth * 1.1;
-      player.level ++;
-      player.lastXp = player.lastXp + 500;
+    if (player.level < player.maxLevel){
+      if (player.xp >= player.lastXp + 500){
+        player.health = player.health * 1.1;
+        player.maxHealth = player.maxHealth * 1.1;
+        player.level ++;
+        player.lastXp = player.lastXp + 500;
   }
+  else;
+}
 }
 
 
