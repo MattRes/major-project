@@ -862,8 +862,8 @@ function orcMovement(){
   if (playMap[orc.x - 1][orc.y] === "."){
     if (orc.x - player.x < 10 ){
       orc.x -= 1;
-      if (orc.x - player.x > 10){
-        orc.x += 1;
+    if (orc.x - player.x > 10){
+      orc.x += 1;
       }
     }
   }
