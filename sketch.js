@@ -768,18 +768,18 @@ function keyPressed(){
     }
     //Stair interaction
     if (direction = "right" && playMap[player.x+1][player.y] === ">"){
-      stairs();
+      //stairs();
       }
     }
     if (direction = "left" && playMap[player.x-1][player.y] === ">"){
-      stairs();
+      //stairs();
     }
     if (direction = "up" && playMap[player.x][player.y-1] === ">"){
-      stairs();
+      //stairs();
     }
     
     if (direction = "down" && playMap[player.x][player.y+1] === ">"){
-      stairs();
+      //stairs();
       }
   playMap[player.x][player.y] = "P";
   orcMovement();
