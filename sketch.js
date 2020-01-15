@@ -224,7 +224,6 @@ function setup() {
     for (let x = 0; x < tilesWide; x++) {
       tileType = lines[y][x];
       playMap[x][y] = tileType;
-      console.log(tileType);
     }
  }
   
@@ -302,7 +301,6 @@ function menuButtons(){
     optionButton.draw();
   }
   optionButton.onPress = function(){
-    console.log("press")
     state = "option";
     clear();
   }
@@ -420,7 +418,6 @@ function displayGameChoiceButtons(){
     confirmButton.draw();
   }
   confirmButton.onPress = function(){
-    console.log("press")
     state = "level1";
     clear();
   }
@@ -659,7 +656,6 @@ function updateHealthBar(){
   xCoor = player.x
   yCoor = player.y
 
-  console.log(xCoor, yCoor, );
 }
 
 function death(){
@@ -772,28 +768,19 @@ function keyPressed(){
     }
     //Stair interaction
     if (direction = "right" && playMap[player.x+1][player.y] === ">"){
-      clear();
-      if (state === "level1"){
-
+      stairs();
       }
     }
     if (direction = "left" && playMap[player.x-1][player.y] === ">"){
-      if (state === "level1"){
-        state = "level2";
-      }
+      stairs();
     }
     if (direction = "up" && playMap[player.x][player.y-1] === ">"){
-      if (state === "level1"){
-        state = "level2";
-      }
+      stairs();
     }
     
     if (direction = "down" && playMap[player.x][player.y+1] === ">"){
-      if (state === "level1"){
-        state = "level2";
+      stairs();
       }
-    }
-  }
   playMap[player.x][player.y] = "P";
   orcMovement();
 };
@@ -861,16 +848,19 @@ function chestDropPopUpButtons(){
 };
 
 function stairs(){
-  levelToLoad = level3
+  if (state === "level1"){
+    state = "level2";
+  }
+  if (state === "level2"){
+    state === "level3";
+  }
+  else;
   } 
 
 function orcMovement(){
-  console.log("orc")
   playMap[orc.x][orc.y] = ".";
-  console.log(orc.x - player.x);
   if (playMap[orc.x - 1][orc.y] === "."){
     if (orc.x - player.x < 10 ){
-      console.log("moving")
       orc.x -= 1;
       if (orc.x - player.x > 10){
         orc.x += 1;
