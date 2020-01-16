@@ -43,8 +43,9 @@ let orc = {
   x:0,
   y:0, 
   attack:3, 
-  health: 0
+  health: 50
 };
+
 let inventory = [];
 
 let tileType;
@@ -807,6 +808,20 @@ function keyPressed(){
     if (direction = "down" && playMap[player.x][player.y+1] === ">"){
       //stairs();
       }
+  if (keyCode === 32){
+    if (direction = "right" && playMap[player.x+1][player.y] === "O"){
+      orc.health = orc.health - player.attack;
+    }
+    if (direction = "left" && playMap[player.x-1][player.y] === "O"){
+      orc.health = orc.health - player.attack;
+    }
+    if (direction = "up" && playMap[player.x][player.y-1] === "O"){
+      orc.health = orc.health - player.attack;
+    }
+    if (direction = "down" && playMap[player.x][player.y+1] === "O"){
+      orc.health = orc.health - player.attack;
+  }
+}
   playMap[player.x][player.y] = "P";
   orcMovement();
 };
@@ -885,7 +900,7 @@ function stairs(){
 
 function orcMovement(){
   playMap[orc.x][orc.y] = ".";
-  if (playMap[orc.x - 1][orc.y] === "."){
+  if (playMap[orc.x - 1][orc.y] === "." && orc.health > 0){
     if (orc.x - player.x <= 10 ){
       orc.x -= 1;
       if (orc.y - player.y < 0 ){
@@ -895,7 +910,7 @@ function orcMovement(){
         orc.y -= 1;
     }
   }
-    if  (orc.x - player.x < 0){
+    else if  (orc.x - player.x < 0){
       orc.x += 2;
       if (orc.y - player.y < 0 ){
         orc.y += 1;
@@ -904,41 +919,53 @@ function orcMovement(){
         orc.y -= 1;
     }
       }
-      console.log("negatives")
+      console.log(orc.health);
       }
-    playMap[orc.x][orc.y] = "O";
+      playMap[orc.x][orc.y] = "O";
+    if (orc.health <= 0){
+      playMap[orc.x][orc.y] = ".";
+      if (playMap[player.x][player.y] === playMap[orc.x][orc.y]){
+        playMap[player.x][player.y] = "P";
+      }
+    }
     }
 
-class enemy{
-  constructor(type, x, y, health, attack){
-    this.type = type;
-    this.x = x;
-    this.y = y;
-    this.health = health;
-    this.attack = attack;
-  }
-  move(){
-    playMap[orc.x][orc.y] = ".";
-  if (playMap[orc.x - 1][orc.y] === "."){
-    if (orc.x - player.x <= 10 ){
-      orc.x -= 1;
-      if (orc.y - player.y < 0 ){
-        orc.y += 1;
-      }
-      if (orc.y - player.y > 0 ){
-        orc.y -= 1;
-      }
-      }
-    if  (orc.x - player.x < 0){
-      orc.x += 2;
-      if (orc.y - player.y < 0 ){
-        orc.y += 1;
-      }
-      if (orc.y - player.y > 0 ){
-        orc.y -= 1;
-  }
-    }
-    }
-    playMap[orc.x][orc.y] = "O";
-  }
-}
+// class enemy{
+//   constructor(type, x, y, health, attack){
+//     this.type = type;
+//     this.x = x;
+//     this.y = y;
+//     this.health = health;
+//     this.attack = attack;
+//   }
+//   move(){
+//     playMap[this.x][this.y] = ".";
+//   if (playMap[this.x - 1][this.y] === "."){
+//     if (this.x - player.x <= 10 ){
+//       this.x -= 1;
+//       if (this.y - player.y < 0 ){
+//         this.y += 1;
+//       }
+//       if (this.y - player.y > 0 ){
+//         this.y -= 1;
+//       }
+//       }
+//     if  (this.x - player.x < 0){
+//       this.x += 2;
+//       if (this.y - player.y < 0 ){
+//         this.y += 1;
+//       }
+//       if (this.y - player.y > 0 ){
+//         this.y -= 1;
+//   }
+//     }
+//     }
+//     playMap[this.x][this.y] = "O";
+//     console.log(this.health);
+//   }
+//   checkDead(){
+//     if (this.health <= 0){
+//       playMap[this.x][this.y] = ".";
+//     }
+//   }
+// }
