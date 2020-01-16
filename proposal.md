@@ -10,7 +10,7 @@ I'm going to make an RPG game, where one can explore diffrent rooms/levels. They
 - Health and Damage system
 - Enemies
 - Sound effects (buttons, attacks and background)
-- Leveling system (Ability to progress and improve stats)
+- Leveling system (Ability to progress and improve stats) (Done)
 - Items (armor, weapons, consumables) 
 
 ## Nice to have list 
