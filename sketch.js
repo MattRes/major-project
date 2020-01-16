@@ -20,6 +20,8 @@ let floorTile;
 let playerSelect = 0;
 let state; 
 
+let sound = false;
+
 let player = {
   sprite: 0, 
   maxHealth:60,
@@ -345,6 +347,27 @@ function optionsButtons(){
   controlsMenu.onPress = function(){
     state = "controlDisplay";
     clear();
+  }
+
+  soundButton = new Clickable(width/2- 100, height/2 - 125);
+  soundButton.resize(200, 70);
+  soundButton.color = "#b00e0e";
+  soundButton.textSize = 20;
+  soundButton.textFont = font;
+  soundButton.text = "Sound";
+  soundButton.draw();
+
+  soundButton.onHover = function(){
+    soundButton.color = "#800606";
+    soundButton.draw();
+  }
+  soundButton.onPress = function(){
+    if (sound) {
+      soundButton.color = "#00ff00";
+    }
+    if (sound != true){
+    soundButton.color = "#b00e0e";
+    }
   }
 }
 function displayControls(){
@@ -863,12 +886,59 @@ function stairs(){
 function orcMovement(){
   playMap[orc.x][orc.y] = ".";
   if (playMap[orc.x - 1][orc.y] === "."){
-    if (orc.x - player.x < 10 ){
+    if (orc.x - player.x <= 10 ){
       orc.x -= 1;
-    if (orc.x - player.x > 10){
-      orc.x += 1;
+      if (orc.y - player.y < 0 ){
+        orc.y += 1;
       }
+      if (orc.y - player.y > 0 ){
+        orc.y -= 1;
     }
   }
-  playMap[orc.x][orc.y] = "O";
+    if  (orc.x - player.x < 0){
+      orc.x += 2;
+      if (orc.y - player.y < 0 ){
+        orc.y += 1;
+      }
+      if (orc.y - player.y > 0 ){
+        orc.y -= 1;
+    }
+      }
+      console.log("negatives")
+      }
+    playMap[orc.x][orc.y] = "O";
+    }
+
+class enemy{
+  constructor(type, x, y, health, attack){
+    this.type = type;
+    this.x = x;
+    this.y = y;
+    this.health = health;
+    this.attack = attack;
+  }
+  move(){
+    playMap[orc.x][orc.y] = ".";
+  if (playMap[orc.x - 1][orc.y] === "."){
+    if (orc.x - player.x <= 10 ){
+      orc.x -= 1;
+      if (orc.y - player.y < 0 ){
+        orc.y += 1;
+      }
+      if (orc.y - player.y > 0 ){
+        orc.y -= 1;
+      }
+      }
+    if  (orc.x - player.x < 0){
+      orc.x += 2;
+      if (orc.y - player.y < 0 ){
+        orc.y += 1;
+      }
+      if (orc.y - player.y > 0 ){
+        orc.y -= 1;
+  }
+    }
+    }
+    playMap[orc.x][orc.y] = "O";
+  }
 }
