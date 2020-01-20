@@ -1,11 +1,11 @@
 XXXXX########XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 XXXX##.T....#XXX#########################XXXXXXXXXXXXXXXXXXX
-XXX#.......######......T................#####XXXXXXXXXXXXXXX
-XXXX#................P............O.........######XXXXXXXXXX
+XXX#...P...######......T................#####XXXXXXXXXXXXXXX
+XXXX#.............................O.........######XXXXXXXXXX
 XXXXX##.....###############...............T......######XXXXX
 XXXXXXX#######XXXXXXXXXXXX##########..................##XXXX
 XXXXXX##......#######XXXXXXXXXXXXX###########..........#XXXX
-XXXXX#.T.............#############.................##...#XXX
+XXXXX#.T.............#############..T..............##...#XXX
 XXXXX#.......######.....................############....#XXX
 XXXXXX###.....##########################XXXXXX####....##XXXX
 XXXXXXXXX##............###XXXXXXXXXXXXXXXXX###.....###XXXXXX

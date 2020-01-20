@@ -22,7 +22,7 @@ XXXXXXXX#............#XXXXXXXXXXXXXXXXX##.......####XXXXXXXX
 XXXXXXXXX#####........#XXXXXXXX########.............####XXXX
 XXXXXXXXX###......####XXXXXXX##...........####..........#XXX
 XXXXXX###...........C#XXXXXX#.....P.....##XXX####........#XX
-XXXXX#............###XXXXXXXX###########XXXX#............#XX
+XXXXX#......O.....###XXXXXXXX###########XXXX#............#XX
 XXXXXX##...........###########################......#####XXX
 XXXXXXXX####........................................#XXXXXXX
 XXXXXXXXXXXX####..........................##########XXXXXXXX

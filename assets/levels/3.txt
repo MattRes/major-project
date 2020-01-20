@@ -10,7 +10,7 @@ XXXX##..........................#####............####XXXXXXX
 XXXXXX########.....................................#XXXXXXXX
 XXXXXXXXXXXXXX################.......................#XXXXXX
 XXXXXXXXXXXXXXXXXXXXXXXX###............................#XXXX
-XXXXXXXXXXXXXXXXXXXXXX##............######..............#XXX
+XXXXXXXXXXXXXXXXXXXXXX##.........O..######..............#XXX
 XXXXXXXXXXXXXXXXXXXXX#.............#XXXXXX#..............#XX
 XXXXXXXXXXXXXXXXXXXXXX#.............######...............#XX
 XXXXXXXXXXXXXXXXXXXXX#..................................#XXX

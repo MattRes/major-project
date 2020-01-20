@@ -19,7 +19,6 @@ let color;
 let floorTile;
 let playerSelect = 0;
 let state; 
-
 let sound = false;
 
 let player = {
@@ -47,9 +46,7 @@ let orc = {
 };
 
 let inventory = [];
-
 let tileType;
-
 let chestItem;
 let chestItemSprite;
 let r;
@@ -64,6 +61,7 @@ function preload(){
   //FANCY GAME FONT
   font = loadFont("assets/Ancient Modern Tales.otf");
   attackSound = loadSound("assets/attackSound.mp3");
+
   // LEVELS 
   lv1 = "assets/levels/1.txt";
   lv2 = "assets/levels/2.txt";
@@ -535,6 +533,14 @@ function level1(){
   chestMenu();
 }
 function level2(){
+  changeMap();
+  displayLevel();
+  updateHealthBar();
+  levelButtons();
+  playerLevelUp();
+  chestMenu();
+}
+function level3(){
   displayLevel();
   updateHealthBar();
   levelButtons();
@@ -691,9 +697,6 @@ function updateHealthBar(){
   fill(255,0,0);
   text("Health : " + floor(player.health), width/15, height/16);
   death();
-  xCoor = player.x
-  yCoor = player.y
-
 }
 
 function death(){
@@ -719,8 +722,7 @@ function death(){
     if (alpha >= 0 && switcher === false){
       alpha += 5;
     }
-    console.log(alpha);
-    // Sends playe back to the main menu
+    // Sends player back to the main menu
     if (keyPressed){
       if (keyCode === 32){
       state = "menu";
@@ -733,6 +735,7 @@ function keyPressed(){
   // Main movement
   playMap[player.x][player.y] = ".";
   if (key === "w" || keyCode === UP_ARROW){
+    // if w or the up arrow is pressed, it checks if the player can move and if on trap -10 health
     player.direction = "up";
     if (playMap[player.x][player.y-1] === "."|| playMap[player.x][player.y-1] === "T"){
       if (playMap[player.x][player.y-1] === "T"){
@@ -743,6 +746,7 @@ function keyPressed(){
     else;;
   }
   if (key === "s" || keyCode === DOWN_ARROW){
+    // if s or the down arrow is pressed, it checks if the player can move and if on trap -10 health
     player.direction = "down";
     if (playMap[player.x][player.y+1] === "."|| playMap[player.x][player.y+1] === "T"){
       if (playMap[player.x][player.y+1] === "T"){
@@ -754,6 +758,7 @@ function keyPressed(){
     else;
   }
   if (key === "d" || keyCode === RIGHT_ARROW){
+    // if d or the right arrow is pressed, it checks if the player can move and if on trap -10 health
     player.direction = "right";
     if (playMap[player.x+1][player.y] === "."|| playMap[player.x+1][player.y] === "T"){
       if (playMap[player.x+1][player.y] === "T"){
@@ -764,6 +769,7 @@ function keyPressed(){
     else;
   }
   if (key === "a" || keyCode === LEFT_ARROW){
+    // if a or the left arrow is pressed, it checks if the player can move and if on trap -10 health
     player.direction = "left";
     if (playMap[player.x-1][player.y] === "." || playMap[player.x-1][player.y] === "T"){
       if (playMap[player.x-1][player.y] === "T"){
@@ -810,18 +816,23 @@ function keyPressed(){
     
     //Stair interaction
     if (direction = "right" && playMap[player.x+1][player.y] === ">"){
+      changeMap();
+      stairs();
+      }
+    else if (direction = "left" && playMap[player.x-1][player.y] === ">"){
+      changeMap();
+      stairs();
+    }
+    else if (direction = "up" && playMap[player.x][player.y-1] === ">"){
+      changeMap();
+      stairs();
+    }
+    else if (direction = "down" && playMap[player.x][player.y+1] === ">"){
+      changeMap();
       stairs();
       }
     }
-    if (direction = "left" && playMap[player.x-1][player.y] === ">"){
-      stairs();
-    }
-    if (direction = "up" && playMap[player.x][player.y-1] === ">"){
-      stairs();
-    }
-    if (direction = "down" && playMap[player.x][player.y+1] === ">"){
-      stairs();
-      }
+
   if (keyCode === 32){
     // Checks to see if theres something to attack
     if (direction = "right" && playMap[player.x+1][player.y] === "O"){
@@ -859,6 +870,7 @@ function keyPressed(){
 };
 
 function chestMenu(){
+  // Creates the main chest menu
   if (chestOpened){
     rectMode(CENTER);
     fill(0,0,255)
@@ -875,12 +887,14 @@ function chestMenu(){
 }
 
 function chestDropPopUp(){
+  //Randomizes the chest drop
   r = floor(random(0, chestItems.length));
   chestItem = chestItems[r].name;
   chestItemSprite = chestItems[r].sprite;
 
 }
 function chestDropPopUpButtons(){
+  // Draws the chest buttons
   if (chestOpened){
     rectMode(CORNER);
     chestEquip = new Clickable(width/2 + 80, height/2 + 10)
@@ -902,7 +916,7 @@ function chestDropPopUpButtons(){
       playerHasItem = true;
       console.log(chestItem[r]);
     }
-
+    // Creates the cancel button for the chest menu
     chestCancel = new Clickable(width/2 + 80, height/2 + 50)
     chestCancel.resize(40, 30);
     chestCancel.color = "#b00e0e";
@@ -922,15 +936,32 @@ function chestDropPopUpButtons(){
 
 function stairs(){
   if (state === "level1"){
+    levelToLoad = lv2;
+    lines = loadStrings(levelToLoad);
+    playMap = createEmpty2dArray(tilesWide, tilesHigh);
     state = "level2";
+
+    
   }
-  if (state === "level2"){
+  else if (state === "level2"){
     state === "level3";
+    levelToLoad = lv3;
+    lines = loadStrings(levelToLoad);
+    playMap = createEmpty2dArray(tilesWide, tilesHigh);
   }
   else;
   } 
 
+  function changeMap(){
+    for (let y = 0; y < tilesHigh; y++) {
+      for (let x = 0; x < tilesWide; x++) {
+        tileType = lines[y][x];
+        playMap[x][y] = tileType;
+      }
+   }
+  }
 function orcMovement(){
+  //Orc movement (not super elegant or efficient/was working on creating this as part of the enemy class, but ran out of time)
   playMap[orc.x][orc.y] = ".";
   if (playMap[orc.x + 1][orc.y] === "." && orc.health > 0){
       if (orc.x - player.x <= 10 && orc.x - player.x > 0){
@@ -943,11 +974,9 @@ function orcMovement(){
         orc.x ++
       }
       if (orc.y - player.y <= 10 && orc.y - player.y > 0){
-        console.log(orc.y - player.y);
         orc.y --
       }
       else if (orc.y - player.y <0){
-        console.log(orc.y - player.y);
         orc.y ++
       }
       if (playMap[orc.x+1][orc.y] === playMap[player.x][player.y] || playMap[orc.x-1][orc.y] === playMap[player.x][player.y]|| 
