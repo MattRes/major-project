@@ -6,8 +6,8 @@
 - Add some instructions on how to play 
 - Liked character selection
 
-## Second Beta Tester
--
--
--
--
+## Second Beta Tester (Zach) 
+- Fix smaller bugs (inventory)
+- Add instructions on how to play
+- More sfx
+- Ranged combat
