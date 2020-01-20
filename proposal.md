@@ -11,7 +11,7 @@ I'm going to make an RPG game, where one can explore diffrent rooms/levels. They
 - Enemies
 - Sound effects (buttons, attacks and background)
 - Leveling system (Ability to progress and improve stats) (Done)
-- Items (armor, weapons, consumables) 
+- Items (armor, weapons, consumables) (Done)
 
 ## Nice to have list 
 - Appealing graphics (levels, enemies, chests, etc.) (Done)

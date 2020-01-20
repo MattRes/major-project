@@ -43,7 +43,7 @@ let orc = {
   x:0,
   y:0, 
   attack:3, 
-  health: 50
+  health: 20
 };
 
 let inventory = [];
@@ -58,16 +58,16 @@ let switcher = true;
 let alpha = 250;
 let floorNumber;
 let lv1, lv2, lv3;
+let attackSound;
 
 function preload(){
   //FANCY GAME FONT
-  font = loadFont("assets/Ancient Modern Tales.otf")
-  
+  font = loadFont("assets/Ancient Modern Tales.otf");
+  attackSound = loadSound("assets/attackSound.mp3");
   // LEVELS 
   lv1 = "assets/levels/1.txt";
   lv2 = "assets/levels/2.txt";
   lv3  = "assets/levels/3.txt";
-
   levelToLoad = lv1;
   lines = loadStrings(levelToLoad);
 
@@ -333,6 +333,7 @@ function optionsButtons(){
     state = "menu";
     clear();
   }
+  // Creates the control menu buttin
   controlsMenu = new Clickable(width/2- 100, height/2);
   controlsMenu.resize(200, 70);
   controlsMenu.color = "#b00e0e";
@@ -350,6 +351,7 @@ function optionsButtons(){
     clear();
   }
 
+  //Creates a sound button
   soundButton = new Clickable(width/2- 100, height/2 - 125);
   soundButton.resize(200, 70);
   soundButton.color = "#b00e0e";
@@ -366,9 +368,10 @@ function optionsButtons(){
     if (sound) {
       soundButton.color = "#00ff00";
     }
-    if (sound != true){
+    if (sound = false){
     soundButton.color = "#b00e0e";
     }
+
   }
 }
 function displayControls(){
@@ -719,6 +722,7 @@ function death(){
 }
 
 function keyPressed(){
+  // Main movement
   playMap[player.x][player.y] = ".";
   if (key === "w" || keyCode === UP_ARROW){
     player.direction = "up";
@@ -761,7 +765,9 @@ function keyPressed(){
     }
     else;
   }
+
   if (key === "h"){
+    // Use health potions
     if (playerHealthPotions > 0){
       player.health +=20;
       if (player.health > player.maxHealth){
@@ -793,22 +799,23 @@ function keyPressed(){
       chestOpened = true;
       chestDropPopUp();
     }
+    
     //Stair interaction
     if (direction = "right" && playMap[player.x+1][player.y] === ">"){
-      //stairs();
+      stairs();
       }
     }
     if (direction = "left" && playMap[player.x-1][player.y] === ">"){
-      //stairs();
+      stairs();
     }
     if (direction = "up" && playMap[player.x][player.y-1] === ">"){
-      //stairs();
+      stairs();
     }
-    
     if (direction = "down" && playMap[player.x][player.y+1] === ">"){
-      //stairs();
+      stairs();
       }
   if (keyCode === 32){
+    // Checks to see if theres something to attack
     if (direction = "right" && playMap[player.x+1][player.y] === "O"){
       orc.health = orc.health - player.attack;
     }
@@ -820,7 +827,9 @@ function keyPressed(){
     }
     if (direction = "down" && playMap[player.x][player.y+1] === "O"){
       orc.health = orc.health - player.attack;
-  }
+    }
+    if (playMap[player.x][player.y] === playMap[orc.x][orc.y])
+      orc.health = orc.health - player.attack;
 }
   playMap[player.x][player.y] = "P";
   orcMovement();
@@ -900,36 +909,38 @@ function stairs(){
 
 function orcMovement(){
   playMap[orc.x][orc.y] = ".";
-  if (playMap[orc.x - 1][orc.y] === "." && orc.health > 0){
-    if (orc.x - player.x <= 10 ){
-      orc.x -= 1;
-      if (orc.y - player.y < 0 ){
-        orc.y += 1;
+  if (playMap[orc.x + 1][orc.y] === "." && orc.health > 0){
+      if (orc.x - player.x <= 10 && orc.x - player.x > 0){
+        if (playMap[orc.x -1][orc.y] != "P"){
+          orc.x --
+        }  
       }
-      if (orc.y - player.y > 0 ){
-        orc.y -= 1;
+      else if (orc.x - player.x <= 1){
+        //console.log("cat");
+        orc.x ++
+      }
+      if (orc.y - player.y <= 10 && orc.y - player.y > 0){
+        console.log(orc.y - player.y);
+        orc.y --
+      }
+      else if (orc.y - player.y <0){
+        console.log(orc.y - player.y);
+        orc.y ++
+      }
+      if (playMap[orc.x+1][orc.y] === playMap[player.x][player.y] || playMap[orc.x-1][orc.y] === playMap[player.x][player.y]|| 
+        playMap[orc.x][orc.y-1] === playMap[player.x][player.y] || playMap[orc.x][orc.y+1] === playMap[player.x][player.y] || playMap[orc.x][orc.y] === playMap[player.x][player.y]){
+        player.health -=3;
+      }
     }
-  }
-    else if  (orc.x - player.x < 0){
-      orc.x += 2;
-      if (orc.y - player.y < 0 ){
-        orc.y += 1;
-      }
-      if (orc.y - player.y > 0 ){
-        orc.y -= 1;
-    }
-      }
-      console.log(orc.health);
-      }
-      playMap[orc.x][orc.y] = "O";
-    if (orc.health <= 0){
+    playMap[orc.x][orc.y] = "O";
+    if (orc.health < 0){
       playMap[orc.x][orc.y] = ".";
-      if (playMap[player.x][player.y] === playMap[orc.x][orc.y]){
-        playMap[player.x][player.y] = "P";
+      if (playMap[orc.x][orc.y] === playMap[player.x][player.y]){
+        playMap[orc.x][orc.y] = "P";
+        player.xp += 250;
       }
-    }
-    }
-
+  }
+}
 // class enemy{
 //   constructor(type, x, y, health, attack){
 //     this.type = type;

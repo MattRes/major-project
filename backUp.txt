@@ -67,7 +67,6 @@ function preload(){
   lv1 = "assets/levels/1.txt";
   lv2 = "assets/levels/2.txt";
   lv3  = "assets/levels/3.txt";
-
   levelToLoad = lv1;
   lines = loadStrings(levelToLoad);
 
