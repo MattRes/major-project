@@ -15,7 +15,7 @@ let levelToLoad;
 let lines;
 let playerHasItem;
 let pulse;
-
+let color;
 let floorTile;
 let playerSelect = 0;
 let state; 
@@ -206,7 +206,7 @@ function setup() {
   poisonPotion1.sprite = poisonPotion;
 
   orc.sprite = orcSprite;
-
+  color = "#800606";
   // 2:1 ratio
   createCanvas(1500, 750 );
   state = "menu"
@@ -354,25 +354,33 @@ function optionsButtons(){
   //Creates a sound button
   soundButton = new Clickable(width/2- 100, height/2 - 125);
   soundButton.resize(200, 70);
-  soundButton.color = "#b00e0e";
+  soundButton.color = color;
   soundButton.textSize = 20;
   soundButton.textFont = font;
   soundButton.text = "Sound";
   soundButton.draw();
 
   soundButton.onHover = function(){
-    soundButton.color = "#800606";
+    soundButton.color = "#800606";;
     soundButton.draw();
   }
   soundButton.onPress = function(){
-    if (sound) {
-      soundButton.color = "#00ff00";
+    if (sound === true){
+      color = "#800606";
+      soundButton.color = color;
+      soundButton.draw();
+      sound = false;
+      console.log(sound)
+      
     }
-    if (sound = false){
-    soundButton.color = "#b00e0e";
-    }
-
+    else if (sound === false){
+      color = "#00FF00";
+      soundButton.color = color;
+      soundButton.draw();
+      sound = true;
+      console.log(sound)
   }
+}
 }
 function displayControls(){
   background(43,75,210);
@@ -818,18 +826,33 @@ function keyPressed(){
     // Checks to see if theres something to attack
     if (direction = "right" && playMap[player.x+1][player.y] === "O"){
       orc.health = orc.health - player.attack;
+      if (sound === true){
+        attackSound.play();
+      }
     }
     if (direction = "left" && playMap[player.x-1][player.y] === "O"){
       orc.health = orc.health - player.attack;
+      if (sound){
+        attackSound.play();
+      }
     }
     if (direction = "up" && playMap[player.x][player.y-1] === "O"){
       orc.health = orc.health - player.attack;
+      if (sound){
+        attackSound.play();
+      }
     }
     if (direction = "down" && playMap[player.x][player.y+1] === "O"){
       orc.health = orc.health - player.attack;
+      if (sound){
+        attackSound.play();
+      }
     }
     if (playMap[player.x][player.y] === playMap[orc.x][orc.y])
       orc.health = orc.health - player.attack;
+      if (sound){
+        attackSound.play();
+      }
 }
   playMap[player.x][player.y] = "P";
   orcMovement();
@@ -950,30 +973,25 @@ function orcMovement(){
 //     this.attack = attack;
 //   }
 //   move(){
-//     playMap[this.x][this.y] = ".";
-//   if (playMap[this.x - 1][this.y] === "."){
-//     if (this.x - player.x <= 10 ){
-//       this.x -= 1;
-//       if (this.y - player.y < 0 ){
-//         this.y += 1;
-//       }
-//       if (this.y - player.y > 0 ){
-//         this.y -= 1;
-//       }
-//       }
-//     if  (this.x - player.x < 0){
-//       this.x += 2;
-//       if (this.y - player.y < 0 ){
-//         this.y += 1;
-//       }
-//       if (this.y - player.y > 0 ){
-//         this.y -= 1;
-//   }
-//     }
-//     }
-//     playMap[this.x][this.y] = "O";
-//     console.log(this.health);
-//   }
+  // playMap[orc.x][orc.y] = ".";
+  // if (playMap[orc.x + 1][orc.y] === "." && orc.health > 0){
+  //     if (orc.x - player.x <= 10 && orc.x - player.x > 0){
+  //       if (playMap[orc.x -1][orc.y] != "P"){
+  //         orc.x --
+  //       }  
+  //     }
+  //     else if (orc.x - player.x <= 1){
+  //       //console.log("cat");
+  //       orc.x ++
+  //     }
+  //     if (orc.y - player.y <= 10 && orc.y - player.y > 0){
+  //       console.log(orc.y - player.y);
+  //       orc.y --
+  //     }
+  //     else if (orc.y - player.y <0){
+  //       console.log(orc.y - player.y);
+  //       orc.y ++
+  //     }
 //   checkDead(){
 //     if (this.health <= 0){
 //       playMap[this.x][this.y] = ".";
